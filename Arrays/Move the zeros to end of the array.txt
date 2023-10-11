@@ -1,0 +1,37 @@
+class Solution {
+    void pushZerosToEnd(int[] arr, int n) {
+        // code here
+        
+        // We can use the two pointer approach for moving the zeros to end
+        
+        // Using first pointer, find the location of first zero and keep the index
+        
+        // again with the for loop swap zeros and non zero number
+        
+        
+        
+        // find the first zero occurance 
+        int j = -1;
+        for(int i = 0; i<n; i++){
+            if(arr[i] == 0){
+                j = i;
+                break;
+            }
+        }
+        
+        // if you dont find the zero just return
+        if(j == -1) return;
+        
+        // swap the zeros with non zeros
+        
+        for(int i = j+1; i<n; i++){
+            if(arr[i] != 0){
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                j++;
+                //increment the j
+            }
+        }
+    }
+}
