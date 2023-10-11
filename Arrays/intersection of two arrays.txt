@@ -1,0 +1,45 @@
+https://leetcode.com/problems/intersection-of-two-arrays/submissions/
+
+class Solution {
+    public int[] intersection(int[] a, int[] b) {
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        int n = a.length;
+        int m = b.length;
+
+        // int[] ans = new int[Math.max(n, m)];
+
+        Stack<Integer> ans = new Stack<>();
+        
+        int i = 0, j = 0;
+        
+        int k = 0;
+        
+        while(i<n && j<m){
+            if(a[i] == b[j]){
+                if(ans.isEmpty() || ans.peek() != a[i])
+                    ans.add(a[i]);
+                i++;
+                j++;
+            }
+            
+            else if(a[i] < b[j]){
+                i++;
+            }
+            
+            else{
+                j++;
+            }
+        }
+
+        int[] finalAns = new int[ans.size()];
+
+        while(!ans.isEmpty()){
+            finalAns[k++] = ans.peek();
+            ans.pop();
+        }
+        
+        return finalAns;
+    }
+}
