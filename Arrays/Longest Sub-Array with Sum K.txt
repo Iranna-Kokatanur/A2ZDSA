@@ -1,0 +1,78 @@
+class Solution{
+    
+   
+    // Function for finding maximum and value pair
+    public static int lenOfLongSubarr (int A[], int N, int K) {
+        //Complete the function
+        
+        // Just store the prefix sum in the hashmap and check sum - K is exist in hashmap for
+        // every iteration.
+        
+        // This method only used when there are positives and negatives
+        
+        int length = 0;
+        
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int sum = 0;
+        
+        for(int i = 0; i<A.length; i++){
+            sum += A[i];
+            
+            if(sum == K){
+                length = Math.max(length, i+1);
+            }
+            
+            int remaining = sum - K;
+            if(map.containsKey(remaining)){
+                int len = i - map.get(remaining);
+                length = Math.max(len, length);
+            }
+            
+            if(!map.containsKey(sum)){
+                map.put(sum, i);
+            }
+            
+        }
+        
+        return length; 
+        
+        
+        // This method will work for when there is positives and zeroes 
+        
+        // Move the right pointer with the sum, if it crosses the K, move left pointer to reduce the sum <= k
+        
+        // time comp - o(2n)
+        
+        int left = 0, right = 0;
+        
+        int sum = A[0];
+        
+        int n = A.length;
+        
+        int length = 0;
+        
+        while(right < n){
+            
+            while(sum > K && left <= right){
+                sum -= A[left];
+                left++;
+            }
+            
+            if(sum == K){
+                length = Math.max(length, right - left + 1);
+            }
+            
+            right++;
+            
+            if(right < n){
+               sum += A[right];
+            }
+            
+        }
+        
+        return length;
+    }
+    
+    
+}
