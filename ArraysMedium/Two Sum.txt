@@ -1,0 +1,42 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+
+        // Better solution
+
+        HashMap<Integer, Integer> ans = new HashMap<>();
+
+        for(int i = 0; i<nums.length; i++){
+            int rem = target - nums[i];
+
+            if(ans.containsKey(rem)){
+                return new int[]{i, ans.get(rem)};
+            }
+
+            ans.put(nums[i], i);
+        }
+
+        return new int[]{-1, -1};
+
+        // Other approach - Two pointer approach
+        // sort the array
+        // have  the left and right pointer, if you want to increase the sum,
+        // just increase the left pointer, otherwise right pointer
+        // if you found the sum, just return it in the array
+
+        Arrays.sort(nums);
+
+        int left = 0, right = nums.length - 1;
+
+        while(left < right){
+            int sum = nums[left] + nums[right];
+            if(sum == target){
+                return new int[]{left, right};
+            }
+            else if(sum > target) right--;
+            else left++;
+
+        }
+        
+        return new int[]{-1, -1};
+    }
+}
