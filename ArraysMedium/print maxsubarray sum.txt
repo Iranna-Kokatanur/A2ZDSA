@@ -1,0 +1,42 @@
+class Solution {
+
+    ArrayList<Integer> findSubarray(int a[], int n) {
+        
+        int sum = 0, maxSum = a[0], maxnum = 0, ind = -1;
+        
+        int start = -1, end = -1, newstart = -1;
+        
+        for(int i = 0; i<a.length; i++){
+            if(sum == 0){
+                start = i;
+            }
+            sum += a[i];
+            
+            if(sum > maxSum){
+                maxSum = sum;
+                newstart = start;
+                end = i;
+            }
+            
+            if(a[i] > maxnum){
+                maxnum = a[i];
+                ind = i;
+            }
+            
+            if(sum < 0) sum = 0;
+        }
+        
+        if(maxnum > maxSum){
+            newstart = end = ind;
+        }
+        
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        for(int i = newstart; i<=end; i++){
+            ans.add(a[i]);
+        }
+        
+        return ans;
+        
+    }
+}
