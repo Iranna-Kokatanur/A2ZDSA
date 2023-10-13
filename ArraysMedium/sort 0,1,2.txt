@@ -1,0 +1,32 @@
+class Solution
+{   
+    public static void swap(int pos, int pos1, int[] a){
+        int temp = a[pos];
+        a[pos] = a[pos1];
+        a[pos1] = temp;
+    }
+    public static void sort012(int a[], int n)
+    {
+       
+       //0 to low -1 => contains sort of 0s
+       // low to mid - 1 => contains sort of 1s
+       // mid to high => unsorted arrays of 0, 1, 2 -> we need to sort it
+       //high+1 to n-1 => contains sort of 2s
+       
+       int low = 0, mid = 0, high = n - 1;
+       
+       while(mid <= high){
+           if(a[mid] == 0){
+               swap(low, mid, a);
+               low++; mid++;
+           }
+           else if(a[mid] == 1){
+               mid++;
+           }else{
+               swap(high, mid, a);
+               high--;
+           }
+       }
+       
+    }
+}
