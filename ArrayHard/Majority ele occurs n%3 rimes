@@ -1,0 +1,60 @@
+https://leetcode.com/problems/majority-element-ii/submissions/
+// MAJORTY ELEMENT N/3 TIMES ONLY BE TWO ELEMENTS IN MOST CASES
+
+class Solution {
+    public List<Integer> majorityElement(int[] a) {
+        
+        // Arrays.sort(nums);
+        
+        List<Integer> ans1 = new ArrayList<Integer>();
+        
+        HashMap<Integer, Integer> ans = new HashMap<>();
+        
+        for(int i = 0; i<a.length; i++){
+            if(ans.get(a[i]) != null){
+                int cnt = ans.get(a[i]);
+                ans.put(a[i], cnt+1);
+            }else{
+                ans.put(a[i], 1);
+            }
+        }
+        
+        for (Map.Entry<Integer,Integer> itr : ans.entrySet()){
+            if(itr.getValue() > a.length/3) ans1.add(itr.getKey());
+        }
+        
+        return ans1; 
+
+        // Appling  Moore's voting algorithm
+
+        List<Integer> ans1 = new ArrayList<Integer>();
+
+        int ele1 = Integer.MIN_VALUE, ele2 = Integer.MIN_VALUE, cnt1 = 0, cnt2 = 0;
+
+        for(int i = 0; i<a.length; i++){
+            if(cnt1 == 0 && a[i] != ele2){
+                cnt1 = 1;
+                ele1 = a[i];
+            }else if(cnt2 == 0 && a[i] != ele1){
+                cnt2 = 1;
+                ele2 = a[i];
+            }else if(ele1 == a[i]) cnt1++;
+            else if(ele2 == a[i]) cnt2++;
+            else{
+                cnt1--;cnt2--;
+            }
+        }
+
+        cnt1 = 0; cnt2 = 0;
+
+        for(int i = 0; i<a.length; i++){
+            if(a[i] == ele1) cnt1++;
+            if(a[i] == ele2) cnt2++;
+        }
+
+        if(cnt1 > a.length/3) ans1.add(ele1);
+        if(cnt2 > a.length/3) ans1.add(ele2);
+
+        return ans1;
+    }
+}
