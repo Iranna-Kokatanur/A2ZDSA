@@ -1,0 +1,35 @@
+https://practice.geeksforgeeks.org/problems/largest-subarray-with-0-sum/1
+
+class GfG
+{
+    int maxLen(int arr[], int n)
+    {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int sum = 0;
+        
+        int finalLength = 0;
+        
+        for(int i = 0; i<arr.length; i++){
+            sum += arr[i];
+            
+            // while doing sum if sum found to be 0 then take the ans in finalLength
+            if(sum == 0){
+                finalLength = Math.max(finalLength, i+1);
+            }
+            
+            //target is 0 so, finding sum - 0 = sum in the hashmap if it is not there just store it
+            // If you store the existing element it will reduce the length of the array
+            
+            if(map.get(sum) != null){
+                int index = map.get(sum);
+                int length = i - index;
+                finalLength = Math.max(length, finalLength);
+            }else{
+                map.put(sum, i);
+            }
+        }
+        
+        return finalLength;
+    }
+}
