@@ -1,0 +1,99 @@
+https://practice.geeksforgeeks.org/problems/overlapping-intervals--170633/1
+
+class Pair{
+    int first;
+    int second;
+    
+    Pair(int first, int second){
+        this.first = first;
+        this.second = second;
+    }
+}
+class Solution
+{
+    public int[][] overlappedInterval(int[][] arr)
+    {
+        // Code here // Code here
+        
+        //o(n logn) + o(2n)
+        
+        // Sort the array
+        Arrays.sort(arr, new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
+            }
+        });
+        
+        ArrayList<Pair> ans = new ArrayList<>();
+        
+        //BETTER SOLUTION
+        
+        /*
+        for(int i = 0; i<arr.length; i++){
+            int start = arr[i][0];
+            int end = arr[i][1];
+            // If the array is not empty, check the last pair in ans
+            // and compare the current element pair is that exist in the last pair
+            // if it is exists, continue
+            //{1, 4}, {1, 2} -> 2 <= 4 so, it exists in {1, 4} so, continue
+            if(!ans.isEmpty()){
+                Pair pair = ans.get(ans.size()-1);
+                int second = pair.second;
+                if(end <= second) continue;
+            }
+            
+            // Check the new pair, whether it is exists in the {start, end}, if it exists update
+            // the latest END
+            
+            // {1, 3} {2, 4} -> 2 <= 3 -> {1, 4}
+            for(int j = i + 1; j<arr.length; j++){
+                int newStart = arr[j][0];
+                int newEnd = arr[j][1];
+                if(newStart <= end){
+                    end = Math.max(end, newEnd);
+                }else{
+                    break;
+                }
+            }
+            
+            // System.out.println(start +" "+ end);
+            
+            ans.add(new Pair(start, end));
+        }*/
+        
+        // OPTIMAL SOLUTION
+        for(int i = 0; i<arr.length; i++){
+            int start = arr[i][0];
+            int end = arr[i][1];
+            
+            // If current pair is not lying in the ans last pair or ans is empty store it
+            // If it is lying then update the last pair
+            if(ans.isEmpty()){
+                ans.add(new Pair(start, end));
+            }else if(!ans.isEmpty()){
+                Pair pair = ans.get(ans.size()-1);
+                int second = pair.second;
+                int first = pair.first;
+                if(start > second) ans.add(new Pair(start, end));
+                else{
+                    second = Math.max(end, second);
+                    ans.set(ans.size()-1, new Pair(first, second));
+                }
+            }
+        }
+        
+        int [][] finalArr = new int[ans.size()][2];
+        
+        int i = 0;
+        
+        for(Pair pair : ans){
+            int start = pair.first;
+            int end = pair.second;
+            finalArr[i][0] = start;
+            finalArr[i++][1] = end;
+            
+        }
+        
+        return finalArr;
+    }
+}
