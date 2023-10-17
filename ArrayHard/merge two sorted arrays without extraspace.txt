@@ -1,0 +1,66 @@
+https://leetcode.com/problems/merge-sorted-array/submissions/
+
+class Solution {
+    // WITHOUT EXTRASPACE
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+
+        int left = m - 1;
+        int right = 0;
+
+        //[0, 1, 3] [2, 4, 5]
+        // arr[left] = 3
+        // arr[right] = 2
+        // 3>2 swap array becomes [0,1,2][3,4,5] dont need to compare others. they have
+        // arr[left] <= arr[right]
+
+        while(left >=0 && right < n){
+            if(nums1[left] > nums2[right]){
+                int temp = nums1[left];
+                nums1[left] = nums2[right];
+                nums2[right]  = temp;
+                left--; right++; 
+            }else{
+                break;
+            }
+        }
+        Arrays.sort(nums1, 0, m);
+        Arrays.sort(nums2, 0, n);
+
+        for(int i = m; i<m+n; i++){
+            nums1[i] = nums2[i-m];
+        }
+
+    }
+    
+    //OTHER SOLN - WITH EXTRA SPACE
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+
+        int num3[] = new int[m + n];
+
+        int i = 0, j = 0, k = 0;
+
+        //{0,1,2} //{4,4,5,6}
+
+        while(i < m && j < n){
+            if(nums1[i] <= nums2[j]){
+                num3[k++] = nums1[i++];
+            }else{
+                num3[k++] = nums2[j++];
+            }
+        }
+
+        while(i < m){
+            num3[k++] = nums1[i++];
+        }
+
+        while(j < n){
+            num3[k++] = nums2[j++];
+        }
+    
+        for(i = 0; i<m+n; i++){
+            nums1[i] = num3[i];
+        }
+        
+    }
+    
+}
