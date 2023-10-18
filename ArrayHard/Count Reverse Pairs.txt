@@ -1,0 +1,69 @@
+
+https://practice.geeksforgeeks.org/problems/count-reverse-pairs/1
+
+// User function Template for Java
+
+// code inversion logic will fail because 
+
+// a[i] > a[j] then we will take pairs like mid - i + 1 otherwise we will do j++ while merging
+
+// so, before merging, just for each element check arr[i] > arr[j] * 2 using countpairs method
+
+
+class Solution {
+    
+    static void merge(int[] arr, int low, int mid, int high){
+        int i = low;
+        int j = mid + 1;
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(i <= mid && j <= high){
+            if(arr[i] <= arr[j]){
+                ans.add(arr[i]);
+                i++;
+            }else{
+                ans.add(arr[j]);
+                j++;
+            }
+        }
+        
+        while(i <= mid){
+            ans.add(arr[i]);
+            i++;
+        }
+        
+        while(j <= high){
+            ans.add(arr[j]);
+            j++;
+        }
+        
+        for(int k = low; k<=high; k++){
+            arr[k] = ans.get(k - low);
+        }
+    }
+    
+    static int countpairs(int[] arr, int low, int mid, int high){
+        int count = 0;
+        int right = mid + 1;
+        for(int i = low; i<=mid; i++){
+            while(right <= high && arr[i] > 2 * arr[right]) right++;
+            count += (right - (mid + 1));
+        }
+        
+        return count;
+    }
+    
+    static int mergesort(int[] arr, int low, int high){
+        int cnt = 0;
+        if(low >= high) return cnt;
+        int mid = (low + high)/2;
+        cnt += mergesort(arr, low, mid);
+        cnt += mergesort(arr, mid + 1, high);
+        cnt += countpairs(arr, low, mid, high);
+        merge(arr, low, mid, high);
+        return cnt;
+    }    
+    
+    public int countRevPairs(int N, int arr[]) {
+        return mergesort(arr, 0, N - 1);
+    }
+}
