@@ -1,0 +1,65 @@
+https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1
+
+class Solution
+{
+    // arr[]: Input Array
+    // N : Size of the Array arr[]
+    //Function to count inversions in the array.
+    
+    // i < j && a[i] > a[j] 
+    
+    // Apply the merge sort, and each level while merging
+    
+    // [1 2 3] [0 0 0] -> 1 > 0 so, no need to check for 2 and 3 because already those are sorted
+    // so count is mid - i + 1
+    
+    
+    static long merge(long[] arr, int low, int mid, int high){
+        long cnt = 0;
+        int i = low;
+        int j = mid + 1;
+        ArrayList<Long> ans = new ArrayList<>();
+        while(i <= mid && j <= high){
+            if(arr[i] <= arr[j]){
+                ans.add(arr[i]);
+                i++;
+            }else{
+                cnt += mid - i + 1;
+                ans.add(arr[j]);
+                j++;
+            }
+        }
+        
+        while(i <= mid){
+            ans.add(arr[i]);
+            i++;
+        }
+        
+        while(j <= high){
+            ans.add(arr[j]);
+            j++;
+        }
+        
+        for(int k = low; k<=high; k++){
+            arr[k] = ans.get(k - low);
+        }
+        
+        return cnt;
+    }
+    
+    static long mergesort(long[] arr, int low, int high){
+        long cnt = 0;
+        if(low >= high) return cnt;
+        int mid = (low + high)/2;
+        cnt += mergesort(arr, low, mid);
+        cnt += mergesort(arr, mid + 1, high);
+        cnt += merge(arr, low, mid, high);
+        return cnt;
+    }
+    
+    static long inversionCount(long arr[], long N)
+    {
+        return mergesort(arr, 0, (int) N - 1);
+        
+    }
+}
