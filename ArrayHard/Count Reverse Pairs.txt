@@ -1,6 +1,8 @@
 
 https://practice.geeksforgeeks.org/problems/count-reverse-pairs/1
 
+// 2 o(n logn)
+
 // User function Template for Java
 
 // code inversion logic will fail because 
