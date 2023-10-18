@@ -1,0 +1,140 @@
+https://practice.geeksforgeeks.org/problems/find-missing-and-repeating2512/1
+
+class Solve {
+    /*
+    // Better solution 
+    int[] findTwoElement(int arr[], int n) {
+        
+        // Just store all the elements in the hashing array with the count
+        //if count > 1 it is repeating number
+        //else if count = 0 it is a missing number
+        
+        int missing = -1;
+        int repeating = -1;
+        
+        // int max = Integer.MIN_VALUE;
+        
+        int [] hash = new int[n+1];
+        
+        for(int i = 0; i<=n; i++){
+            hash[i] = 0;
+        }
+        
+        for(int i = 0; i<n; i++){
+            hash[arr[i]]++;
+            // System.out.println(hash[2]);
+        }
+        
+        
+        
+        for(int i = 1; i<=n; i++){
+            if(hash[i] > 1) repeating = i;
+            else if(hash[i] == 0) missing = i;
+            
+            if(missing != -1 && repeating != -1) break;
+        }
+        
+        return new int[]{repeating, missing};
+        
+    }
+    */
+    
+    // Optimal solution using sum 
+    /*
+    int[] findTwoElement(int a[], int m) {
+        // code here
+        long n = a.length; // size of the array
+        // Find Sn and S2n:
+        long SN = (n * (n + 1)) / 2;
+        long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+
+        // Calculate S and S2:
+        long S = 0, S2 = 0;
+        for (int i = 0; i < n; i++) {
+            S += a[i];
+            S2 += (long)a[i] * (long)a[i];
+        }
+
+        //S-Sn = X-Y:
+        long val1 = S - SN;
+
+        // S2-S2n = X^2-Y^2:
+        long val2 = S2 - S2N;
+
+        //Find X+Y = (X^2-Y^2)/(X-Y):
+        val2 = val2 / val1;
+
+        //Find X and Y: X = ((X+Y)+(X-Y))/2 and Y = X-(X-Y),
+        // Here, X-Y = val1 and X+Y = val2:
+        long x = (val1 + val2) / 2;
+        long y = x - val1;
+
+        int[] ans = {(int)x, (int)y};
+        return ans;
+    }*/
+    
+    //optimal solution using xor elements
+    int[] findTwoElement(int a[], int n) {
+        
+       // 1. find the xor of array elements with 1 to n and with array elements
+        
+        
+        // 2. find the differentiating bit means first 1 from the lsb
+        // 3. using differentiating bit, find all the elements who have 
+        //    0 in differentiating bit in one array -> xor it -> we will get repeating number
+        //    1 in differenting bit in one array -> xor it -> we will get missing number
+        
+        int xor = 0;
+        
+        for(int i = 1; i<=n; i++){
+            xor = xor ^ i;
+        }
+        
+        for(int i = 0; i<a.length; i++){
+            xor = xor ^ a[i];
+        }
+        
+        // find the differentiating bit
+        int bitno = 0;
+        // 100 & 001 ->000
+        // 100 & 010 -> 000
+        // 100 & 100 -> 100 (other than 0)
+        while(true){
+            if((xor & (1 << bitno)) != 0){
+                break;
+            }
+            bitno++;
+        }
+        
+        int zero = 0;
+        int one = 0;
+        
+        for(int i = 0; i<a.length; i++){
+            if((a[i] & (1 << bitno)) != 0){
+                one = one ^ a[i];
+            }else{
+                zero = zero ^ a[i];
+            }
+        }
+        
+        for(int i = 1; i<=n; i++){
+            if((i & (1 << bitno)) != 0){
+                one = one ^ i;
+            }else{
+                zero = zero ^ i;
+            }
+        }
+        
+        int cnt = 0;
+        
+        for(int i = 0; i<n; i++){
+            if(a[i] == zero) cnt++;
+        }
+        
+        if(cnt == 2) return new int[]{zero, one};
+        
+        return new int[]{one, zero};
+        
+    }
+    
+}
