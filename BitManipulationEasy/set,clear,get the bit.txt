@@ -1,0 +1,17 @@
+https://www.codingninjas.com/studio/problems/bit-manipulation_8142533?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution {
+    public static int[] bitManipulation(int num, int i){
+        // Write your code here.
+
+        int finalnum = num;
+
+        int bit = (num >> i - 1) & 1;
+
+        int setbit = num | (1 << i - 1);
+
+        int clearbit = num & ~(1 << i - 1);
+
+        return new int[]{bit, setbit, clearbit};
+    }
+}
