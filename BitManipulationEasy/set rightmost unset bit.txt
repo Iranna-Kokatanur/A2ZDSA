@@ -1,0 +1,37 @@
+https://www.codingninjas.com/studio/problems/set-the-rightmost-unset-bit_8160456?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution {
+    public static int setBits(int N){
+        // Write your code here.
+
+        // 2' s complement = 1's comp + 1
+        // 1' s complement = negation of num
+
+        // 100100 -> 1s complement => 011011
+        // 2s complement -> 011100 -> so, 2s complement will remains the same upto 1st 
+        // right most set bit, in this case 2nd pos -> 100
+        // it is same in original num and 2s complement
+
+        // do logical and with 2's complement, you will get the answer of first right most set bit, 
+        // 100100 & 011100 -> 000100 ->8
+
+       // ------------------------------------------
+
+        // n - 1 will unset the right most set bit and flips all its right
+
+         //   100100 - 1 =>  100011
+        // n & n - 1 to mask the elements after the unset bit
+        //    100100 & 100011 -> 10000
+            if((N & (N + 1)) == 0) return N;
+            N = ~N;
+
+            N = N & (N-1);
+
+            return ~N;
+
+        // or other way is N & (N + 1), not works for 2^K - 1 because 7 -> 111 no unset bit
+
+
+
+    }
+}
