@@ -1,0 +1,16 @@
+
+
+
+SWAP EVEN AND ODD BITS
+
+om = ox55555555; (Hex) -> bin (01010101..)
+em = oxAAAAAAAA; (Hex) -> bin (10101010..)
+
+int odds = n & om;
+int evens = n & em;
+
+odds = odds << 1;
+
+evens = evens >> 1;
+
+n = odds | evens;
