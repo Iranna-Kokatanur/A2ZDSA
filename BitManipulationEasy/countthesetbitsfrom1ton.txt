@@ -1,0 +1,46 @@
+https://www.codingninjas.com/studio/problems/count-total-set-bits_784?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution{
+    public static int largestpowerof2inrange(int n){
+
+        int x = 0;
+
+        while((1 << x) <= n){
+            x+=1;
+        }
+
+        return x - 1;
+    }
+    public static int countSetBits(int n) {
+       
+       // if n = 11, take first 8 which is highest power of 2 < 11 -> 0 to 7
+       // 000, 001, 010, 011, 100, 101, 110, 111
+       // you can get 1 about 4 from lsb
+       // 4 from lsb - 1
+       // 4 from msb
+       // 8/2 * 8/2 * 8/2 means (8/2)*3 => ((2)**(3-1))*3 => 12
+       // so, we can consider for for highest power of x, we will get 1 around
+        // (2**(x-1))*x) -> x is the power of 2
+
+        // now left 3 numbers -> 8 -> 11 -> (n - (2**x)) => (11 - 8) => 3 => 4 numbers
+        // including 8 => 8,9,10,11
+        // binary are => 1000, 1001, 1010, 1011 => we will get 4 1s from msb => (n - (2**x)) + 1
+        // exclude msb it is kind of repeating => 000, 001, 010, 011
+        // Apply same algo
+
+        // (2**(x-1))*x) + ((n - (2**x)) + 1)) + solve for(n - (2**x))
+
+        
+        // find the largest power of 2 in range in n
+
+        if(n == 0) return 0;
+
+        int x = largestpowerof2inrange(n);
+
+        int bitupto2powerx = x * (1 << (x-1));
+        int msbfrom2powerxton = n - (1 << x) + 1;
+        int rest = n - (1 << x);
+
+        return bitupto2powerx + msbfrom2powerxton + countSetBits(rest);
+    }
+}
