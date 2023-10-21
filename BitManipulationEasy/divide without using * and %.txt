@@ -1,0 +1,31 @@
+https://www.codingninjas.com/studio/problems/-divide-two-integers_1112617?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution{
+    public static int divideTwoInteger(int dividend, int divisor) {
+        // Write your code here.
+
+        if(divisor == (1 << 31) && divisor == 1) return Integer.MIN_VALUE;
+
+        boolean sign = (dividend > 0) == (divisor > 0)? false: true;
+
+        int res = 0;
+
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+
+        while(dividend - divisor >= 0) {
+			int count = 0;
+			while(dividend - (divisor << count) >= 0) {
+				count++;
+			}
+			res += (1 << (count - 1));
+			dividend = (dividend - (divisor << (count - 1)));
+		}
+
+        if(sign){
+            return -(res);
+        }else{
+            return res;
+        }
+    }
+}
