@@ -1,0 +1,28 @@
+https://www.codingninjas.com/studio/problems/two-numbers-with-odd-occurrences_8160466?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution {
+    public static int[] twoOddNum(int []arr){
+        // Write your code here.
+
+        int xor = 0;
+
+        for(int a : arr) xor ^= a;
+
+        //find the first set bit
+
+        int firstsetbitnum = xor & -xor;
+
+        // separate the number who have first set bit and non set bit
+
+        int x = 0;
+        int y = 0;
+
+        for(int a: arr){
+            if((a & firstsetbitnum) == 0) x ^= a;
+            else y ^=a;
+        }
+
+        if(x > y) return new int[]{x, y};
+        return new int[]{y, x};
+    }
+}
