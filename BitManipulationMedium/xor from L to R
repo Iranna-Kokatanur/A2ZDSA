@@ -1,0 +1,29 @@
+
+https://www.codingninjas.com/studio/problems/l-to-r-xor_8160412?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution {
+    public static int findXorFrom1toN(int N){
+        int ans = 0;
+        if(N % 4 == 0) ans = N;
+        if(N % 4 == 1) ans = 1;
+        if(N % 4 == 2) ans = N + 1;
+        if(N % 4 == 3) ans = 0;
+
+        return ans;
+    }
+    public static int findXOR(int L, int R){
+        // Write your code here.
+
+        // xor propeties for 1 to N
+
+        // if(N % 4 == 0) ans = N
+        // if(N % 4 == 1) ans = 1
+        // if(N % 4 == 2) ans = N + 1
+        // if(N % 4 == 3) ans = 0
+
+        int ansL = findXorFrom1toN(L - 1);
+        int ansR = findXorFrom1toN(R);
+
+        return ansL ^ ansR;
+    }
+}
