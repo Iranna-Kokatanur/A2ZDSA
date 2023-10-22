@@ -1,0 +1,93 @@
+https://www.codingninjas.com/studio/problems/stack-using-queue_795152?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+import java.util.*;
+
+public class Solution{
+    static class Stack {
+        // Define the data members.
+
+        // 1st approach - using 2 Queues   
+        /*
+            1. add the element in the queue
+            2. take all the elements from q1 and push it to the q2
+            3. take all the elements from q2 and push it to the q1
+        
+        */
+
+        //2nd approach - using 1 Queue
+        /*
+            1. Add the element in Q1
+              and remove the size - 1 elements from Q1
+              and add those elements in Q1.
+
+              because newly added elements has to be
+              there in Queue front, because it is 
+              stack implementation
+        
+        */
+
+        Queue<Integer> q1, q2;
+
+        public Stack() {
+            // Implement the Constructor.
+
+            q1 = new LinkedList<Integer>();
+            q2 = new LinkedList<Integer>();
+        }
+
+        /*----------------- Public Functions of Stack -----------------*/
+
+        public int getSize() {
+            // Implement the getSize() function.
+            return q1.size();
+        }
+
+        public boolean isEmpty() {
+            // Implement the isEmpty() function.
+            return q1.isEmpty();
+        }
+
+        public void push(int element) {
+            // Implement the push(element) function.
+
+            // 1st approach
+            /* q2.add(element);
+
+            while(!q1.isEmpty()){
+                q2.add(q1.remove());
+            }
+
+            while(!q2.isEmpty()){
+                q1.add(q2.remove());
+            } */
+
+            //2nd approach
+
+            q1.add(element);
+
+            int cnt = 0;
+
+            while(cnt < q1.size() - 1){
+                int remove = q1.remove();
+                q1.add(remove);
+                cnt++;
+            }
+        }
+
+        public int pop() {
+            // Implement the pop() function.
+            if(q1.isEmpty())
+                return -1;
+            else 
+                return q1.remove();
+        }
+
+        public int top() {
+            // Implement the top() function.
+            if(q1.isEmpty())
+                return -1;
+            else 
+                return q1.peek();
+        }
+    }
+}
