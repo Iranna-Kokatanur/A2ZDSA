@@ -1,0 +1,72 @@
+https://www.codingninjas.com/studio/problems/implement-queue-using-linked-list_8161235?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+/****************************************************************
+
+ Following is the class structure of the Node class:
+
+ class Node {
+     public int data;
+     public Node next;
+
+     Node()
+     {
+         this.data = 0;
+         this.next = null;
+     }
+
+     Node(int data)
+     {
+         this.data = data;
+         this.next = null;
+     }
+
+     Node(int data, Node next)
+     {
+         this.data = data;
+         this.next = next;
+     }
+ };
+
+ class Queue{
+     Node front;
+     Node rear;
+     void push(){};
+     Queue() {
+         front = null;
+         rear = null;
+     }
+ }
+
+ *****************************************************************/
+
+public class Solution extends Queue{
+    public void push(int x) {
+        Node node = new Node(x);
+        node.next = front;
+        front = node;
+
+        if(rear == null) rear = front;
+
+    }
+
+    public int pop() {
+        if(front == null || rear == null){
+            return -1;
+        }
+        if(rear == front){
+            int ans = front.data;
+            front = rear = null;
+            return ans;
+        }
+        Node temp = front;
+
+        while(temp.next != rear){
+            temp = temp.next;
+        }
+        int ans = rear.data;
+        temp.next = null;
+        rear = temp;
+
+        return ans;
+    }
+}
