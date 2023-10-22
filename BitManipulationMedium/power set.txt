@@ -1,0 +1,27 @@
+https://www.codingninjas.com/studio/problems/subsequences-of-string_985087?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+class Solution {
+    public static ArrayList<String> subsequences(String str) {
+        // Write your code here
+
+        ArrayList<String> ans = new ArrayList<String>();
+        int length = str.length();
+        // abc -> 3 -> 2**3 -> 8 -> 000, 001, 010, 011, 100, 101, 110, 111
+        for(int i = 0; i<(1 << length); i++){
+            String st = "";
+            for(int j = 0; j < length; j++){
+                if((i & (1 << j)) != 0){ // check the bit is set or not
+                    st += str.charAt(j);
+                }
+                
+            }
+            if(i > 0)
+                ans.add(st);
+        }
+
+        return ans;
+    }
+}
