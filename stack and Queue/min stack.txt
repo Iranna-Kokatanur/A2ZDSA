@@ -1,0 +1,113 @@
+https://www.codingninjas.com/studio/problems/min-stack_3843991?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+//OPTIMAL - 0(N) space
+class MinStack {
+    Stack < Long > st = new Stack < Long > ();
+    Long mini;
+
+    /** initialize your data structure here. */
+    public MinStack() {
+        mini = Long.MAX_VALUE;
+    }
+
+    public void push(int value) {
+        Long val = Long.valueOf(value);
+        if (st.isEmpty()) {
+            mini = val;
+            st.push(val);
+        } else {
+            if (val < mini) {
+                st.push(2 * val - mini);
+                mini = val;
+            } else {
+                st.push(val);
+            }
+        }
+    }
+
+    public void pop() {
+        if (st.isEmpty()) return;
+
+        Long val = st.pop();
+        if (val < mini) {
+            mini = 2 * mini - val;
+        }
+    }
+
+    public int top() {
+        Long val = st.peek();
+        if (val < mini) {
+            return mini.intValue();
+        }
+        return val.intValue();
+    }
+
+    public int getMin() {
+        return mini.intValue();
+    }
+}
+
+
+//BETTER - space o(2N) space because of using pair
+import java.util.* ;
+import java.io.*; 
+
+class Pair{
+    int ele;
+    int min;
+
+    Pair(int ele, int min){
+        this.ele = ele;
+        this.min = min;
+    }
+}
+public class Solution {
+
+    static class MinStack {
+
+        Stack<Pair> st = new Stack<>();
+
+        // Constructor
+        MinStack() {
+            // Write your code here.
+        }
+
+        // Function to add another element equal to num at the top of stack.
+        void push(int num) {
+            // Write your code here.
+            if(st.size() == 0) st.push(new Pair(num, num));
+            else{
+                Pair pair = st.peek();
+                int min = pair.min;
+                min = Math.min(num, min);
+                st.push(new Pair(num, min));
+            }
+        }
+
+        // Function to remove the top element of the stack.
+        int pop() {
+            // Write your code here.
+            if(st.isEmpty()) return -1;
+            Pair pair = st.pop();
+            return pair.ele;
+        }
+
+        // Function to return the top element of stack if it is present. Otherwise
+        // return -1.
+        int top() {
+            // Write your code here.
+            if(st.isEmpty()) return -1;
+            Pair pair = st.peek();
+            return pair.ele;
+        }
+
+        // Function to return minimum element of stack if it is present. Otherwise
+        // return -1.
+        int getMin() {
+            // Write your code here.
+            if(st.isEmpty()) return -1;
+            Pair pair = st.peek();
+            return pair.min;
+        }
+    }
+}
