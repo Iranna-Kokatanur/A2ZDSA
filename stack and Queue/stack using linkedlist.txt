@@ -1,0 +1,81 @@
+https://www.codingninjas.com/studio/problems/implement-stack-with-linked-list_1279905?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+/****************************************************************
+
+ Following is the class structure of the Node class:
+
+ static class Node
+ {
+     int data;
+     Node next;
+     Node()
+     {
+         this.data = 0;
+         this.next = null;
+     }
+     Node(int data)
+     {
+         this.data = data;
+         this.next = null;
+     }
+     Node(int data, Node next)
+     {
+         this.data = data;
+         this.next = next;
+     }
+ };
+
+
+ *****************************************************************/
+public class Solution {
+    static class Stack {
+        //Write your code here
+
+        Node head = null;
+        int count = 0;
+
+        Stack()
+        {
+            
+        }
+
+        int getSize()
+        {
+            return count;
+        }
+
+        boolean isEmpty()
+        {
+            return count == 0;
+        }
+
+        void push(int data)
+        {
+            //Write your code here
+            Node node = new Node(data);
+            
+            node.next = head;
+            head = node;
+            this.count++;
+            
+        }
+
+        void pop()
+        {
+            //Write your code here
+            if(head != null){
+                head = head.next;
+                count--;
+            }
+        }
+
+        int getTop()
+        {
+            if(count == 0){
+                return -1;
+            }else{
+                return head.data;
+            }
+        }
+    }
+}
