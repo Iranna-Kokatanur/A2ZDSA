@@ -1,0 +1,43 @@
+
+https://www.codingninjas.com/studio/problems/stack-implementation-using-array_3210209?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution{
+    static class Stack {
+        int[] arr;
+        int k = -1;
+        int size = 0;
+        Stack(int capacity) {
+            arr = new int[capacity];
+            size = capacity;
+        }
+        public void push(int num) {
+            if(isFull() == 0)
+                arr[++k] = num;
+        }
+        public int pop() {
+            if(isEmpty() == 0)
+                return arr[k--];
+            return -1;
+        }
+        public int top() {
+            if(isEmpty() == 0)
+                return arr[k];
+            return -1;
+
+        }
+        public int isEmpty() {
+            int ans = 0;
+            if(k == -1){
+                ans = 1;
+            }
+            return ans;
+        }
+        public int isFull() {
+            int ans = 0;
+            if(k == size - 1){
+                ans = 1;
+            }
+            return ans;
+        }
+    }
+}
