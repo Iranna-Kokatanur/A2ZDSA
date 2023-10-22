@@ -1,0 +1,27 @@
+https://www.codingninjas.com/studio/problems/flip-bits_8160405?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+public class Solution {
+    public static int flipBits(int A, int B){
+        // Write your code here.
+
+        // xor will give the the diff of bis
+
+        int n = A ^ B;
+
+        // Apply kernighan's algorithm to find the number of set bits
+
+        int cnt = 0;
+        
+        while(n != 0){
+             // it will give the first set bit number from lsb
+            int rm = n & -n;
+           
+            // now remove the first set bit from the number to find other set bits
+
+            n = n - rm;
+            cnt++;
+        }
+
+        return cnt;
+    }
+}
