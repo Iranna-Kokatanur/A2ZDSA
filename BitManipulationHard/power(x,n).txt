@@ -1,0 +1,24 @@
+https://www.codingninjas.com/studio/problems/power-of-numbers_8157729?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=0
+
+public class Solution {
+    public static int power(int n, int R){
+        // Write your code here.
+
+        long N = n;
+        long nn = R;
+        long ans = 1;
+        long mod = (long) 1e9+7;
+
+        while(nn > 0){
+            if(nn % 2 == 1){
+                ans = (ans * N) % mod;
+                nn = nn - 1;
+            }else{
+                N = (N * N) % mod;
+                nn =  nn / 2;
+            }
+        }
+        
+        return (int) ans;
+    }
+}
