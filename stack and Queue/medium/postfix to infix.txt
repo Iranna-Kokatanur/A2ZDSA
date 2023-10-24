@@ -1,0 +1,37 @@
+https://practice.geeksforgeeks.org/problems/postfix-to-infix-conversion/1
+
+class Solution {
+    //Read from the start of the exp,
+    
+    // If the operator found, remove the two elements name first one, ch2 and ch1
+    // and make the result, operand + operaration + operand and push to the stack
+    
+    // if the operand found, directly push to the stack
+    
+    // return the top of the stack
+    
+    static boolean isOperator(String ch){
+        return (ch.equals("+") || ch.equals("-") || ch.equals("*") || ch.equals("/") || ch.equals("%"));
+    }
+    static String postToInfix(String exp) {
+        String ans = "";
+        
+        Stack<String> st = new Stack<>();
+        
+        for(int i = 0; i<exp.length(); i++){
+            
+            char ch = exp.charAt(i);
+            
+            if(isOperator(ch+"")){
+                String ch2 = st.pop();
+                String ch1 = st.pop();
+                String ch3 = "(" + ch1 + ch + ch2 +")";
+                st.push(ch3);
+            }else{
+                st.push(ch+"");
+            }
+        }
+        
+        return st.pop();
+    }
+}
