@@ -1,0 +1,27 @@
+https://www.codingninjas.com/studio/problems/immediate-smaller-element-_1062597?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+import java.util.Stack;
+import java.util.Arrays;
+public class Solution {
+    public static void immediateSmaller(int [] arr) {
+
+        Stack<Integer> st = new Stack<>();
+
+        int poppedEle = -1;
+
+        for(int i = arr.length - 1; i>=0; i--){
+            // Remove all the small elements and equal elements which are
+            // smaller than arr[i]
+            
+            int arrEle = arr[i];
+            if(poppedEle < arr[i]){
+                arr[i] = poppedEle;
+            }else{
+                arr[i] = -1;
+            }
+
+            poppedEle = arrEle;
+
+        }
+    }
+}
