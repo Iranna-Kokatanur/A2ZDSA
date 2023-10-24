@@ -1,5 +1,8 @@
 https://www.codingninjas.com/studio/problems/day-23-:-infix-to-postfix-_1382146?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
 
+// Infix to Prefix - Is the same approach as infix to postfix.
+// Extra two steps - 1) reverse the expression, convert ( to ), apply the postfix logic, reverse the final expression
+
 import java.util.Stack;
 public class Solution {
     static int precedence(char c) {
