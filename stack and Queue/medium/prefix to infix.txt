@@ -1,0 +1,33 @@
+
+// reverse the string, if operands found add in the stack. If operators found, remove two elements from stack
+// make operand + operator + operand, push the result into the stack.
+// return top of the stack.
+class Solution {
+    
+    static boolean isOperator(String ch){
+        return (ch.equals("+") || ch.equals("-") || ch.equals("*") || ch.equals("/") || ch.equals("%"));
+    }
+    
+    static String preToInfix(String pre_exp) {
+        // code here
+        
+        String ans = "";
+        
+        Stack<String> st = new Stack<>();
+        
+        for(int i = pre_exp.length() - 1; i>=0; i--){
+            char ch = pre_exp.charAt(i);
+            if(isOperator(ch+"")){
+                String ch1 = st.pop();
+                String ch2 = st.pop();
+                
+                String ch3 = "(" + ch1 + ch + ch2 + ")";
+                st.push(ch3);
+            }else{
+                st.push(ch + "");
+            }
+        }
+        
+        return st.pop();
+    }
+}
