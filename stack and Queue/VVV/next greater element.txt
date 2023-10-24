@@ -1,0 +1,27 @@
+https://www.codingninjas.com/studio/problems/next-greater-element_670312?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+import java.util.Arrays;
+import java.util.Stack;
+
+public class Solution {
+    public static int[] nextGreaterElement(int[] arr, int n) {
+        // Write your code here.
+
+        int[] finalAns = new int[arr.length];
+        Arrays.fill(finalAns, -1);
+
+        Stack<Integer> st = new Stack<>();
+
+        for(int i = arr.length - 1; i>=0; i--){
+            // Remove all the small elements and equal elements which are
+            // smaller than arr[i]
+            while(!st.isEmpty() && st.peek() <= arr[i]) st.pop();
+
+            if(!st.isEmpty()) finalAns[i] = st.peek();
+
+            st.push(arr[i]);
+        }
+
+        return finalAns;
+    }
+}
