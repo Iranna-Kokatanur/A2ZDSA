@@ -1,0 +1,68 @@
+https://www.codingninjas.com/studio/problems/day-23-:-infix-to-postfix-_1382146?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+import java.util.Stack;
+public class Solution {
+    static int precedence(char c) {
+        if (c == '^') return 3;
+        else if (c == '/' || c == '*') return 2;
+        else if (c == '+' || c == '-') return 1;
+        else return -1;
+    }
+
+    public static String infixToPostfix(String exp) {
+        // Write your code here
+
+
+        //postfix expression - operand operand operator
+        // 2+3 => 23+
+
+        /*
+            Steps:
+
+            1. If the char is letter or num, add to the ans string
+            2. if the char is '(', push to the stack
+            3. If the char is ')', remove all the elements from
+               stack until you find ')', add all to the ans String
+               remove '(' from stack and dont add to the ans.
+               don't push ')' in the stack.
+            4. if the precedence of top of stack is >= current ch,
+               remove from the stack and add to the ans.
+               add push the current char to stack.
+
+            5. remove all the elements from stack and add to the ans
+               string
+        
+        */
+
+        Stack<Character> st = new Stack<>();
+
+        String ans = "";
+
+        for(int i = 0; i<exp.length(); i++){
+            char ch = exp.charAt(i);
+
+            // if the ch is character or number, just add it to the answer
+            if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')){
+                ans += ch;
+            }else if(ch == '('){
+                st.push('(');
+            }else if(ch == ')'){
+                while(st.peek() != '('){
+                    ans += st.pop();
+                }
+                st.pop();
+            }else{
+                while(!st.isEmpty() && (precedence(st.peek()) >= precedence(ch))){
+                    ans += st.pop();
+                }
+                st.push(ch);
+            }
+        }
+
+        while(!st.isEmpty()){
+            ans += st.pop();
+        }
+
+        return ans;
+    }
+}
