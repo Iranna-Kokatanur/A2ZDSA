@@ -1,5 +1,5 @@
-
-// reverse the string, if operands found add in the stack. If operators found, remove two elements from stack
+https://practice.geeksforgeeks.org/problems/prefix-to-infix-conversion/1
+// read from end the prefix expression ( because it contains operands at the last of the expr), if operands found add in the stack. If operators found, remove two elements from stack
 // make operand + operator + operand, push the result into the stack.
 // return top of the stack.
 class Solution {
