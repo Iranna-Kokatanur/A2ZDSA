@@ -1,0 +1,41 @@
+https://practice.geeksforgeeks.org/problems/postfix-to-prefix-conversion/1
+
+class Solution {
+    static boolean isOperator(String ch){
+        return (ch.equals("+") || ch.equals("-") || ch.equals("*") || ch.equals("/") || ch.equals("%"));
+    }
+    
+    static String postToPre(String post_exp) {
+        // code here
+        
+        // postfix to postfix
+        
+        // Read from the start of the prefix expression
+        // If found the operator, remove the operands from the stack,
+        // and do the result like, operator+ operand + operand 
+        // push the result to the stack
+        // If found the operator, push to the stack directly
+        
+        String ans = "";
+        
+        Stack<String> st = new Stack<>();
+        
+        for(int i = 0; i<post_exp.length(); i++){
+            char ch = post_exp.charAt(i);
+            
+            if(isOperator(ch+"")){
+                //changes are here, ch2 will be at the top then the ch1
+                String ch2 = st.pop();
+                String ch1 = st.pop();
+                
+                String ch3 = ch + ch1 + ch2;
+                
+                st.push(ch3);
+            }else{
+                st.push(ch+"");
+            }
+        }
+        
+        return st.pop();
+    }
+}
