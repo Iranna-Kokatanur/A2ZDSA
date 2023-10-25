@@ -1,0 +1,65 @@
+https://leetcode.com/problems/trapping-rain-water/submissions/
+
+import java.util.Arrays;
+public class Solution {
+    public static long getTrappedWater(long []arr, int n) {
+        // Write your code here.
+
+        // Water level at that position - min(leftwall, rightwall) - water at that level
+
+        // computing the prefix 
+
+        // Tc = o(2n), space = o(2n)
+
+        /*
+        long[] prefix = new long[n];
+        Arrays.fill(prefix, 0);
+        prefix[0] = arr[0];
+        long[] suffix = new long[n];
+        Arrays.fill(suffix, 0);
+        suffix[n-1] = arr[n-1];
+
+        for(int i = 1; i<n; i++){
+            prefix[i] = Math.max(prefix[i-1], arr[i]);
+        }
+
+        // computing the suffix
+
+        for(int i = n - 2; i>=0; i--){
+            suffix[i] = Math.max(suffix[i+1], arr[i]);
+        }
+
+        // computing ans = min(leftwall, rightwall) - water at that level
+        long ans = 0;
+        for(int i = 0; i<n; i++){
+            ans += Math.min(prefix[i], suffix[i]) - arr[i];
+        }
+
+        return ans; */
+
+        //OPTIMIZED APPROACH WITH O(1) SPACE
+
+        
+        int left = 0;
+        int right = n - 1;
+        long leftMax = 0, rightMax = 0;
+        long ans = 0;
+
+        while(left <= right){
+            // computing the left water from start
+            if(arr[left] <= arr[right]){
+                if(arr[left] > leftMax) leftMax = arr[left];
+                else ans += (leftMax - arr[left]);
+                left++;
+            }else{
+                // computing the right water level from end
+                if(arr[right] > rightMax) rightMax = arr[right];
+                else ans += (rightMax - arr[right]);
+                right--;
+            }
+        }
+
+        return ans; 
+
+    }
+}
