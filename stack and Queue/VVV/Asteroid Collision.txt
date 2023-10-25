@@ -1,0 +1,49 @@
+https://www.codingninjas.com/studio/problems/asteroid-collision_977232?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Stack;
+import java.util.Collections;
+public class Solution {
+    public static List< Integer > collidingAsteroids(int []arr) {
+        //    Write your code here.
+
+        Stack<Integer> st = new Stack<>();
+
+        for(int i = 0; i<arr.length; i++){
+            if(arr[i] > 0){
+                st.add(arr[i]);
+            }else{
+
+                //Remove all the elements from the top
+                // which are greater than zero but less than 
+                // abs of arr[i]
+                while(!st.isEmpty() && st.peek() > 0 && st.peek() < Math.abs(arr[i])) {
+                    st.pop();
+                }
+                //Remove all the elements from the top
+                // which are greater than zero but equal to 
+                // abs of arr[i]
+
+                if(!st.isEmpty() && st.peek() > 0 && st.peek() == Math.abs(arr[i])) {
+                    st.pop(); 
+                    continue;
+                }
+                
+                // store the negative element if top is <=0
+                // or stack is empty
+                if(st.isEmpty() || st.peek() <= 0) st.push(arr[i]);
+            }
+        }
+
+        List<Integer> ans = new ArrayList<>();
+
+        while(!st.isEmpty()){
+            ans.add(st.pop());
+        }
+
+        Collections.reverse(ans);
+
+        return ans;
+    }
+}
