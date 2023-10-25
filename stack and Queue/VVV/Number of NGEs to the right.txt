@@ -1,0 +1,99 @@
+// java code for the above approach
+import java.io.*;
+import java.util.*;
+
+public class GFG {
+	// Function for performing merge operation
+	static void merge(List<Pair<Integer, Integer>> vec, int[] ans,
+					int low, int mid, int high) {
+		int n1 = mid - low + 1;
+		int n2 = high - mid;
+		List<Pair<Integer, Integer>> arr = new ArrayList<>();
+		List<Pair<Integer, Integer>> brr = new ArrayList<>();
+		// Copy elements to temporary arrays
+		for (int i = 0; i < n1; i++) {
+			arr.add(vec.get(i + low));
+		}
+		for (int i = 0; i < n2; i++) {
+			brr.add(vec.get(i + mid + 1));
+		}
+		int i = 0;
+		int j = 0;
+		int k = low;
+		while (i < n1 && j < n2) {
+			if (arr.get(i).first < brr.get(j).first) {
+				// Finding number of next greater elements
+				ans[arr.get(i).second] += n2 - j;
+				vec.set(k, arr.get(i));
+				i++;
+				k++;
+			} else {
+				vec.set(k, brr.get(j));
+				j++;
+				k++;
+			}
+		}
+		while (i < n1) {
+			vec.set(k, arr.get(i));
+			i++;
+			k++;
+		}
+		while (j < n2) {
+			vec.set(k, brr.get(j));
+			j++;
+			k++;
+		}
+	}
+	// Function for performing Merge Sort
+	static void mergeSort(List<Pair<Integer, Integer>> vec,
+						int[] ans, int low, int high) {
+		int mid;
+		if (low < high) {
+			// Divide them into two different parts
+			mid = low + (high - low) / 2;
+			// Calling mergeSort function recursively for both
+			// the parts
+			mergeSort(vec, ans, low, mid);
+			mergeSort(vec, ans, mid + 1, high);
+			merge(vec, ans, low, mid, high);
+		}
+	}
+	// Function to find number of next greater elements on the right of
+	// a given element
+	static void nextGreaterElements(int n, int[] nums,
+									int queries, int[] indices) {
+		// Storing elements of the array with their index into
+		// a list of pairs
+		List<Pair<Integer, Integer>> vec = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			vec.add(new Pair<>(nums[i], i));
+		}
+		// Declaring an array to store the number of next greater
+		// elements for every element
+		int[] ans = new int[n];
+		mergeSort(vec, ans, 0, n - 1);
+		// Printing the number of next 
+		// greater elements for Q queries
+		for (int i = 0; i < indices.length; i++) {
+			int j = indices[i];
+			System.out.print(ans[j] + " ");
+		}
+	}
+	// Driver's code
+	public static void main(String[] args) {
+		int[] nums = {44,449,449,483,453,458,53,101,142,443,13,130,474,59,316,213,455,136,50,437,128,59,366,214,449,59,404,52,368,409,139,414,483,149,393,132,469,494,216,146,390,48,65,422,494,426,180,397,49,224};
+		int queries = 2;
+		int[] indices = {49,7,10,2,27,27,21,6,12,46,44,49,2,42,43,25,7,17,4,27,35,37,17,8,4,29,37,30,32,16,22,34,16,8,23,6,48,20,23,37,45 };
+		// Function call
+		nextGreaterElements(nums.length, nums, queries, indices);
+	}
+	// Helper class to store pairs
+	static class Pair<K, V> {
+		K first;
+		V second;
+		Pair(K first, V second) {
+			this.first = first;
+			this.second = second;
+		}
+	}
+}
