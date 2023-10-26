@@ -1,0 +1,57 @@
+https://leetcode.com/problems/remove-k-digits/submissions/
+
+class Solution {
+    public String removeKdigits(String str, int k) {
+       /*
+			Remove the first peaks:
+
+			132 -> 3 is the peak, so, if you remove, the number will be smaller
+			12
+
+			1023 -> if 0 after the peak, remove the peak, dont store zero, move forward
+			for other elements -> for 23.
+
+			123 -> if peak exists at the last, remove from the last.
+
+			if the stack is empty, return 0;
+		
+		
+		*/
+		java.util.Stack<Character> st = new java.util.Stack<>();
+
+		// Removing the peak elements K times and storing the current element
+		for(int i = 0; i<str.length(); i++){
+			char ch = str.charAt(i);
+			while(!st.isEmpty() && k > 0 && st.peek() > ch){
+				st.pop();
+				k--;
+			}
+
+			// dont store zero after removing all the elements from peak, go for the next
+			if(!st.isEmpty() || ch != '0'){
+				st.push(ch);
+			}
+		}
+
+		// If peak exists at the last.
+
+		while(!st.isEmpty() && k>0) {
+			st.pop();
+			k--;
+		}
+
+		// If the stack is empty return 0
+
+		if(st.isEmpty()) return "0";
+
+		String ans = "";
+
+		while(!st.isEmpty()){
+			ans += st.pop();
+		}
+		java.lang.StringBuilder input1 = new java.lang.StringBuilder();
+		input1.append(ans);
+		input1.reverse();
+		return input1.toString();
+    }
+}
