@@ -1,0 +1,62 @@
+https://www.codingninjas.com/studio/problems/largest-rectangle-in-a-histogram_1058184?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+import java.util.Arrays;
+import java.util.Stack;
+
+public class Solution {
+
+	public static int largestAreaInHistogram(int[] hist){
+		int ans = 0;
+        
+        int width = 0;
+        
+        int n = hist.length;
+
+		Stack<Integer> st = new Stack<>();
+        
+        for(int i = 0; i<=n; i++){
+            
+            while(!st.isEmpty() && (i == n || hist[st.peek()] >= hist[i])){
+                
+                int height = hist[st.peek()];
+                st.pop();
+                if(st.isEmpty()) width = i;
+                else width = i - st.peek() - 1;
+                ans = Math.max(ans, height * width);
+            }
+            
+            st.add(i);
+        }
+        
+        return ans;
+	}
+	public static int maximalAreaOfSubMatrixOfAll1(int[][] mat, int n, int m) {
+		// Write your code here.
+
+		// Use the largest area in histogram problem here for each row
+
+		// Stack<Integer> st = new Stack<>();
+
+		int[] arr = new int[m];
+
+		Arrays.fill(arr, 0);
+		// int ans = 0;
+
+		// ans = Math.max(ans, largestAreaInHistogram(st, arr));
+
+		int ans = 0;
+
+		for(int i = 0; i<n; i++){
+			for(int j = 0; j<m; j++){
+				if(mat[i][j] == 1) arr[j] += mat[i][j];
+				else arr[j] = 0;
+			}
+
+			ans = Math.max(ans, largestAreaInHistogram(arr));
+		}
+
+		return ans;
+
+
+	}
+}
