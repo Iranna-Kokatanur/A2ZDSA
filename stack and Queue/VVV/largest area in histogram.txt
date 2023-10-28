@@ -1,0 +1,86 @@
+https://www.codingninjas.com/studio/problems/largest-rectangle-in-a-histogram_1058184?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Solution {
+  public static int largestRectangle(ArrayList < Integer > heights) {
+    // Write your code here.
+
+    //To find the largest area we need to find the left min, right min
+
+    Stack<Integer> st = new Stack<>();
+
+    /*int leftmin[] = new int[heights.size()];
+    int rightmin[] = new int[heights.size()];
+
+    int n = heights.size();
+
+    for(int i = 0; i<heights.size(); i++){
+      // If current element is smaller than top of the stack remove until you find lower
+      while(!st.isEmpty() && heights.get(i) <= heights.get(st.peek())) st.pop();
+
+      if(st.isEmpty()) leftmin[i] = 0;
+      else leftmin[i] = st.peek() + 1;
+
+      st.push(i);
+    }
+
+    //To clear all the elements from the stack
+    while(!st.isEmpty()) st.pop();
+
+    for(int i = heights.size() - 1; i>=0; i--){
+      // If current element is smaller than top of the stack remove until you find lower
+      while(!st.isEmpty() && heights.get(i) <= heights.get(st.peek())) st.pop();
+
+      if(st.isEmpty()) rightmin[i] = n - 1;
+      else rightmin[i] = st.peek() - 1;
+
+      st.push(i);
+    }
+    
+
+    int ans = 0;
+
+    for(int i = 0; i<n; i++){
+      ans = Math.max(ans, (rightmin[i] - leftmin[i] + 1) * heights.get(i));
+    }
+
+    return ans; */
+
+
+    // Another approach
+
+    // When you find the current index is lesser than
+    // top, that will be the right min, you need to 
+    // find the left min from the stack
+    // and if any elements left in the stack
+    // compute the left min and right min for those also
+
+    int width = 0;
+
+    int ans = 0;
+
+    int n = heights.size();
+
+    for(int i = 0; i<=n; i++){
+      
+      while(!st.isEmpty() && (i == n || heights.get(st.peek()) >= heights.get(i))){
+        int height = heights.get(st.peek());
+        st.pop();
+
+        if(st.isEmpty()) width = i;
+        else width = i - st.peek() - 1;
+
+        ans = Math.max(ans, width * height);
+
+      }
+
+      st.push(i);
+
+    }
+
+    return ans;
+
+  }
+}
