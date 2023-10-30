@@ -1,0 +1,43 @@
+https://www.codingninjas.com/studio/problems/stock-span_5243295?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
+
+import java.util.Deque;
+import java.util.Stack;
+import java.util.ArrayDeque;
+
+public class Solution {
+
+    static class Pair{
+        int ele;
+        int days;
+
+        Pair(int a, int b){
+            ele = a;
+            days = b;
+        }
+    }
+    public static int[] findStockSpans(int []prices) {
+        // Write your code here.
+
+        Stack<Pair> st = new Stack<>();
+
+        int[] ans = new int[prices.length];
+
+        // Store the pair of price and the days
+        
+        for(int i = 0, k = 0; i<prices.length; i++){
+            
+            int days = 1;
+            while(!st.isEmpty() && st.peek().ele < prices[i]){
+                Pair pair = st.pop();
+                days += pair.days;
+            }
+        
+            st.push(new Pair(prices[i], days));
+
+            ans[k++] = days;
+        }
+
+        return ans;
+
+    }
+}
