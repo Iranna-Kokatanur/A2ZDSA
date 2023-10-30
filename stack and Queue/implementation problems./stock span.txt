@@ -1,5 +1,6 @@
 https://www.codingninjas.com/studio/problems/stock-span_5243295?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=1
 
+//o(n)
 import java.util.Deque;
 import java.util.Stack;
 import java.util.ArrayDeque;
