@@ -1,0 +1,84 @@
+https://www.codingninjas.com/studio/problems/the-celebrity-problem_982769?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTab=0
+
+import java.util.* ;
+
+import java.io.*; 
+/*
+	This is signature of helper function 'knows'.
+	You should not implement it, or speculate about its implementation.
+
+	boolean knows(int A, int B); 
+	Function 'knows(A, B)' will returns "true" if the person having
+	id 'A' know the person having id 'B' in the party, "false" otherwise.
+	Use it as Runner.knows(A, B);
+*/
+	
+public class Solution {
+
+	/*
+		[0 1 0]
+		[0 0 0] -> 
+		[0 1 0]
+	
+		0 means A dont know B, 1 Means A knows B
+		-> we need to find the row where all Zeros
+		and column where all one except diagonal
+
+		-> Means Person not know anyone(0) but everyone
+		knows him(1) 
+	*/
+	public static int findCelebrity(int n) {
+        /*int i = 0, j = 0;
+		for(i = 0; i<n; i++){
+			for(j = 0; j<n; j++){
+				if(i == j) continue;
+				if(Runner.knows(i, j)) break; // If row found to be 1, break
+				if(!Runner.knows(j, i)) break; // If column found to be 0, break
+			}
+
+			if(j == n) return i;
+		}
+
+		return -1; */
+
+
+		// Another approach using stack
+
+		// Store all the elements in stack, keep the celebrity in stack until size = 1
+		// check the ans with its row and col whether they are having 0 in the row
+		// and 1 in column
+
+		Stack<Integer> st = new Stack<>();
+
+		for(int i = 0; i<n; i++) st.push(i);
+
+		while(st.size() > 1){
+			int a = st.pop();
+			int b = st.pop();
+
+			if(Runner.knows(a, b)){
+				st.push(b);
+			}else{
+				st.push(a);
+			}
+		}
+
+		int ans = st.pop();
+
+		int zeroc = 0, onec = 0;
+
+		for(int i = 0; i<n; i++){
+			if(!Runner.knows(ans, i) && i != ans) zeroc++;
+		}
+
+		if(zeroc != n - 1) return -1;
+
+		for(int i = 0; i<n; i++){
+			if(Runner.knows(i, ans) && i != ans) onec++;
+		}
+
+		if(zeroc != onec) return -1;
+
+		return ans;
+    }
+}
