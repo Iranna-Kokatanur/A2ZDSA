@@ -1,0 +1,27 @@
+https://www.codingninjas.com/studio/problems/print-subsequences_8416366?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+import java.util.ArrayList;
+import java.util.List;
+public class Solution {
+
+    public static void printSubSequence(List<String> ans, String s, String str, int index){
+
+        if(index == s.length()){
+            if(str.isEmpty()) ans.add("'Empty String'");
+            else ans.add(str);
+
+            return;
+        }
+        char ch = s.charAt(index);
+
+        printSubSequence(ans, s, str, index + 1);
+        printSubSequence(ans, s, str + ch, index + 1);
+    }
+    public static List<String> generateSubsequences(String s) {
+        List<String> ans = new ArrayList<>();
+
+        printSubSequence(ans, s, "", 0);
+
+        return ans;
+    }
+}
