@@ -1,0 +1,31 @@
+https://leetcode.com/problems/combination-sum/submissions/
+
+//TC -> o(2^t  * k)
+// SC -> o(number of comb * k)
+class Solution {
+    public static void CombSum(List<List<Integer>> ans, List<Integer> list, int[] arr, int index, int target){
+
+        if(index == arr.length){
+            if(target == 0) {
+        		List<Integer> temp = new ArrayList<>(list);
+	            ans.add(temp);
+        	}
+            return;
+        }
+
+        if(target - arr[index] >= 0){
+            list.add(arr[index]);
+            CombSum(ans, list, arr, index, target - arr[index]);
+            list.remove(list.size() - 1);
+        }
+
+        CombSum(ans, list, arr, index + 1, target);
+    }
+    public List<List<Integer>> combinationSum(int[] ARR, int B) {
+        List< List < Integer > > ans = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        CombSum(ans, list, ARR, 0, B);
+
+        return ans;
+    }
+}
