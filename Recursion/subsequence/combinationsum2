@@ -1,0 +1,31 @@
+https://leetcode.com/problems/combination-sum-ii/description/
+
+class Solution {
+
+    public static void combinationSum(List<List<Integer>> ans, List<Integer> list, int index, int[] arr, int target){
+        //  [1 1 2] -> [1] [X] [2] -> pick1, dont pick 2 index because it is same as the previous
+        //  pick second . Recursion continues. 
+        if(target == 0){
+            List<Integer> temp = new ArrayList<>(list);
+            ans.add(temp);
+            return;
+        }
+        for(int i = index; i<arr.length; i++){
+            //pick every index, if it already picked I mean previous index has the same element just leave it
+            if(i > index && arr[i] == arr[i-1]) continue;
+            //arr[i] > target -> exit
+            if(arr[i] > target) break;
+            list.add(arr[i]);
+            combinationSum(ans, list, i + 1, arr, target - arr[i]);
+            list.remove(list.size()-1);
+        }
+    }
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        //sort the elements first
+        Arrays.sort(candidates);
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        combinationSum(ans, list, 0, candidates, target);
+        return ans;
+    }
+}
