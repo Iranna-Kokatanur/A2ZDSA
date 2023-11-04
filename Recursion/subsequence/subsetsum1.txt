@@ -1,0 +1,28 @@
+https://www.codingninjas.com/studio/problems/subset-sum_3843086?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+
+    //o(2^n) + and sorting. o(2^n) log(2^n)
+    public static void subsetSum1(int ind, ArrayList<Integer> ans, int[] arr, int sum){
+        
+        if(ind == arr.length){
+            ans.add(sum);
+            return;
+        }
+        //pick the element 
+        subsetSum1(ind + 1, ans, arr, sum + arr[ind]);
+
+        //not pick the element
+        subsetSum1(ind + 1, ans, arr, sum);
+    }
+    public static ArrayList<Integer> subsetSum(int num[]) {
+        // Write your code here..
+        ArrayList<Integer> ans = new ArrayList<>();
+        subsetSum1(0, ans, num, 0);
+        Collections.sort(ans);
+        return ans;
+    }
+
+}
