@@ -1,5 +1,5 @@
 https://leetcode.com/problems/combination-sum-ii/description/
-
+//o(2^n * k)
 class Solution {
 
     public static void combinationSum(List<List<Integer>> ans, List<Integer> list, int index, int[] arr, int target){
