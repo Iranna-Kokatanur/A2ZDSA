@@ -1,0 +1,40 @@
+https://leetcode.com/problems/palindrome-partitioning/submissions/
+
+class Solution {
+
+    public static void partition(List<List<String>> ans, int ind, List<String> ds, String str){
+
+        //Make a partition on each index, only make a partition if the string is palindrome 
+        // make the recursion call to remaining string
+
+        if(ind == str.length()){
+            ans.add(new ArrayList<>(ds));
+            return;
+        }
+
+        for(int i = ind; i<str.length(); i++){
+
+            if(isPalidrome(str, ind, i)){
+                ds.add(str.substring(ind, i+1));
+                partition(ans, i + 1, ds, str);
+                ds.remove(ds.size()-1);
+            }
+
+        }
+
+    }
+
+    private static boolean isPalidrome(String str, int start, int end){
+
+        while(start <= end){
+            if(str.charAt(start++) != str.charAt(end--)) return false;
+        }
+
+        return true;
+    }
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        partition(ans, 0, new ArrayList<>(), s);
+        return ans;
+    }
+}
