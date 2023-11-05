@@ -1,0 +1,121 @@
+https://leetcode.com/problems/permutations/submissions/
+
+class Solution {
+
+    // It is taking o(3n) time complexity to check whether the postion is safe or not
+    private static boolean isSafe(char[][] arr, int row, int col, int n){
+
+        int duprow = row;
+        int dupcol = col;
+
+        // check for diagonal
+
+        while(row >= 0 && col >= 0){
+            if(arr[row][col] == 'Q') return false;
+            row--;
+            col--;
+        }
+
+        // check the current col
+
+        row = duprow;
+        col = dupcol;
+
+        while(col >= 0){
+            if(arr[row][col] == 'Q') return false;
+            col--;
+        }
+
+        // check below diagonal
+
+        row = duprow;
+        col = dupcol;
+
+        while(row < n && col >= 0){
+            if(arr[row][col] == 'Q') return false;
+            col--;
+            row++;
+        }
+
+        return true;
+    }
+    private static void solveQueens(char[][] arr, int n, int col, List<List<String>> ans){
+
+        if(col == n){
+            List<String> temp = new ArrayList<>();
+            for(int i = 0; i<n; i++){
+                temp.add(new String(arr[i]));
+            }
+            ans.add(new ArrayList<>(temp));
+            return;
+        }
+
+        for(int i = 0; i<n; i++){
+            if(isSafe(arr, i, col, n)){
+                arr[i][col] = 'Q';
+                solveQueens(arr, n, col + 1, ans);
+                arr[i][col] = '.';
+            }
+        }
+    }
+
+
+    // OPTIMAL SOLUTION
+
+    private static void solveQueens2(char[][] arr, int n, int col, List<List<String>> ans, int[] belowDiagonal,
+    int[] upperDiagonal, int[] leftrow){
+
+        if(col == n){
+            List<String> temp = new ArrayList<>();
+            for(int i = 0; i<n; i++){
+                temp.add(new String(arr[i]));
+            }
+            ans.add(new ArrayList<>(temp));
+            return;
+        }
+
+        for(int i = 0; i<n; i++){
+            int row = i;
+            if(leftrow[row] == 0 && upperDiagonal[(n-1)+col-row] == 0 && belowDiagonal[row+col] == 0){
+                arr[i][col] = 'Q';
+                leftrow[i] = 1;
+                // fill  ((n-1) + col - row) for belowDiagonal because it is easy to check safe conditions
+                upperDiagonal[(n-1)+col-row] = 1;
+                // fill (row + col) for belowDiagonal because it is easy to check safe conditions
+                belowDiagonal[row+col] = 1;
+                solveQueens2(arr, n, col + 1, ans, belowDiagonal, upperDiagonal, leftrow);
+                arr[i][col] = '.';
+                leftrow[i] = 0;
+                upperDiagonal[(n-1)+col-row] = 0;
+                belowDiagonal[row+col] = 0;
+            }
+        }
+    }
+
+    public List<List<String>> solveNQueens(int n) {
+
+        List<List<String>> ans = new ArrayList<>();
+
+        char[][] charArr = new char[n][n];
+
+
+        for(int i = 0; i<n; i++){
+            Arrays.fill(charArr[i], '.');
+        }
+
+        // solveQueens(charArr, n, 0, ans);
+        int[] leftrow = new int[n];
+
+        Arrays.fill(leftrow, 0);
+        int[] belowDiagonal = new int[2 * n - 1];
+        Arrays.fill(belowDiagonal, 0);
+        int[] upperDiagonal = new int[2 * n - 1];
+        Arrays.fill(upperDiagonal, 0);
+
+
+        solveQueens2(charArr, n, 0, ans, belowDiagonal, upperDiagonal, leftrow);
+
+        return ans;
+        
+    }
+}
