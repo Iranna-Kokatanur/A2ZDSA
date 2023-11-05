@@ -1,0 +1,60 @@
+https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1
+class Solution {
+    
+    // o(4 ^ (n * m))  S. C: o( n * m)
+    public static void ratInMaze(ArrayList<String> ans, int row, int col, boolean[][] vis, int[][] m, String str){
+        
+        // Go for all the directions
+        int n = m.length;
+        
+        if(row == n - 1 && col == n - 1){
+            ans.add(str);
+            return;
+        }
+        
+        
+        // Down
+        
+        if(row + 1 < n && !vis[row + 1][col] && m[row + 1][col] == 1){
+            vis[row][col] = true;
+            ratInMaze(ans, row + 1, col, vis, m, str + "D");
+            vis[row][col] = false;
+        }
+        
+        // Left
+        if(col - 1 >= 0 && !vis[row][col - 1] && m[row][col - 1] == 1){
+            vis[row][col] = true;
+            ratInMaze(ans, row, col - 1, vis, m, str + "L");
+            vis[row][col] = false;
+        }
+        
+        // Right
+        
+        if(col + 1 < n && !vis[row][col + 1] && m[row][col + 1] == 1){
+            vis[row][col] = true;
+            ratInMaze(ans, row, col + 1, vis, m, str + "R");
+            vis[row][col] = false;
+        }
+        // Up
+        
+        if(row - 1 >= 0 && !vis[row - 1][col] && m[row - 1][col] == 1){
+            vis[row][col] = true;
+            ratInMaze(ans, row - 1, col, vis, m, str + "U");
+            vis[row][col] = false;
+        }
+    }
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        // Your code here
+        
+        ArrayList<String> ans = new ArrayList<>();
+        boolean[][] vis = new boolean[n][n];
+        
+        for(int i = 0; i<n; i++) Arrays.fill(vis[i], false);
+        
+        if(m[0][0] == 1) ratInMaze(ans, 0, 0, vis, m, "");
+        
+        return ans;
+        
+        
+    }
+}
