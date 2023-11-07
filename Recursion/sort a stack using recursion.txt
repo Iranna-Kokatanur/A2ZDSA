@@ -1,0 +1,32 @@
+https://practice.geeksforgeeks.org/problems/sort-a-stack/1
+class GfG{
+    
+    public void InsertGreatestEleAtBottom(Stack<Integer> st, int ele){
+        
+        if(st.isEmpty()){
+            st.push(ele);
+            return;
+        }
+        
+        if(ele < st.peek()){
+            int top = st.pop();
+            InsertGreatestEleAtBottom(st, ele);
+            st.push(top);
+        }else{
+            st.push(ele);
+        }
+        
+    }
+    public void sortMe(Stack<Integer> st){
+        if(st.isEmpty()) return;
+        int top = st.pop();
+        sortMe(st);
+        InsertGreatestEleAtBottom(st, top);
+    }
+    
+	public Stack<Integer> sort(Stack<Integer> s)
+	{
+		sortMe(s);
+		return s;
+	}
+}
