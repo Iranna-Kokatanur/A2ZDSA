@@ -1,0 +1,34 @@
+https://leetcode.com/problems/word-break/description/
+
+class Solution {
+
+    public static boolean wordBreak(String str, List<String> wordDict, int ind, String s, int[] dp){
+
+        if(ind == str.length()){
+            return true;
+        }
+        if(dp[ind] != -1) return dp[ind] == 1;
+        for(int i = ind; i<str.length(); i++){
+
+            String newString = str.substring(ind, i+1);
+            if(wordDict.contains(newString)){
+                 if(wordBreak(str, wordDict, i + 1, s + newString, dp)) {
+                     dp[ind] = 1;
+                     return dp[ind] == 1;
+                 }
+            }
+        }
+        dp[ind] = 0;
+        return dp[ind] == 1;
+
+    }
+    public boolean wordBreak(String s, List<String> wordDict) {
+
+        // Brute force method
+       int[] dp = new int[301];
+       Arrays.fill(dp, -1);
+       return wordBreak(s, wordDict, 0, "", dp);
+       
+        
+    }
+}
