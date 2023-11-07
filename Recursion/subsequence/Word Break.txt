@@ -9,10 +9,11 @@ class Solution {
         }
         if(dp[ind] != -1) return dp[ind] == 1;
         for(int i = ind; i<str.length(); i++){
-
+            // Partion the word by index, check it is present in dict, if it is call the recursion for next indices
             String newString = str.substring(ind, i+1);
             if(wordDict.contains(newString)){
                  if(wordBreak(str, wordDict, i + 1, s + newString, dp)) {
+                    // store the elements in DP
                      dp[ind] = 1;
                      return dp[ind] == 1;
                  }
