@@ -1,0 +1,23 @@
+https://www.codingninjas.com/studio/problems/subset-sum_630213?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+
+public class Solution {
+
+    public static boolean isPresent(int ind, int[] a, int k){
+        if(ind == a.length){
+            return k == 0;
+        }
+
+        if(k - a[ind] >= 0){
+            if(isPresent(ind + 1, a, k - a[ind])) return true;
+        }
+
+        if(isPresent(ind + 1, a, k)) return true;
+        return false;
+    }
+    public static boolean isSubsetPresent(int n, int k,int []a) {
+        // Write your code here
+
+        return isPresent(0, a, k);
+
+    }
+}
