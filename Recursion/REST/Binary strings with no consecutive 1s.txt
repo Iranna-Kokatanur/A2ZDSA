@@ -1,0 +1,27 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+
+    // ""
+    // 0 1
+    // 00 01 10 11
+    // 000 001 010 011 100 101 110 111
+    // Every time append 0 and 1 for old string
+    public static void solve(List<String> list, String ans, int N){
+        if(N == 0){
+            list.add(ans);
+            return;
+        }
+        solve(list, ans + "0", N - 1);
+        if(!ans.endsWith("1"))
+            solve(list, ans + "1", N - 1);
+    }
+
+    public static List< String > generateString(int N) {
+        // Write your code here.
+        List<String> list = new ArrayList<>();
+        solve(list, "", N);
+        return list;
+    }
+}
