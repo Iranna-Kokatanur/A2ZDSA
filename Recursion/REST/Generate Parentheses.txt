@@ -1,0 +1,38 @@
+https://leetcode.com/problems/generate-parentheses/submissions/
+
+class Solution {
+
+    /**
+    
+        We have two options,
+
+        1. we can insert "(" until given n, I mean open < n
+        2. Or we can close already opened paranthesis, I mean close < open
+
+        ""
+        (   ""
+        ()  ""
+    
+     */
+    public static void solve(List<String> ans, String str, int close, int open, int n){
+
+        if(str.length() == 2 * n){
+            ans.add(str);
+            return;
+        }
+        // insert the open until < n
+        if(open < n){
+            solve(ans, str+"(", close, open + 1, n);
+        }
+
+        // insert until close < open
+        if(close < open){
+            solve(ans, str + ")", close + 1, open, n);
+        }
+    }
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        solve(ans, "", 0, 0, n);
+        return ans;
+    }
+}
