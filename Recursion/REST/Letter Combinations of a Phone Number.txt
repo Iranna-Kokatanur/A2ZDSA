@@ -1,0 +1,32 @@
+https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
+class Solution {
+
+    // 23
+    // abc, def
+    // pick the first element 2
+    // call its elements
+    // a    b    c
+    // pick 3
+    // call again for d e f 
+    // ad ae af bd be bf cd ce cf
+    public void solve(String[] str, String str1, String digits, List<String> ans, int ind) {
+        if(str1.length() == digits.length()){
+            ans.add(str1);
+            return;
+        }
+
+        int index = digits.charAt(ind) - '0';
+
+        for(int i = 0; i<str[index].length(); i++){
+            solve(str, str1 + str[index].charAt(i), digits, ans, ind + 1);
+        }
+    }
+    public List<String> letterCombinations(String digits) {
+
+        String[] str = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        List<String> ans = new ArrayList<>();
+        if(digits.isEmpty()) return ans;
+        solve(str, "", digits, ans, 0);
+        return ans;
+    }
+}
