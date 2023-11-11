@@ -1,0 +1,17 @@
+class Solution {
+    public boolean rotateString(String s, String goal) {
+
+        if(s.length() != goal.length()) return false;
+
+        // Just combine the s string with the same
+
+        // because it will contain all the answers of rotation
+
+        // just check if the target is existing in the string
+       
+        String string = s + s;
+
+        return string.contains(goal);
+        
+    }
+}
