@@ -1,0 +1,36 @@
+https://leetcode.com/problems/reverse-words-in-a-string/submissions/
+
+class Solution {
+    public String reverseWords(String s) {
+
+
+        int i = 0;
+
+		int n = s.length();
+		
+		String finalAns = "";
+
+
+		while(i < n){
+			String ans = "";
+			// if space is encountered move the pointer
+			while(i < n && s.charAt(i) == ' ') i++;
+
+			// if space is not encountered
+			while(i < n && s.charAt(i) != ' ') {
+				ans += s.charAt(i);
+				i++;
+			}
+			
+			if(!ans.isEmpty()){
+				if(finalAns.isEmpty()) finalAns = ans;
+				else finalAns = ans + " " + finalAns; 
+			}
+			
+
+		}
+
+		return finalAns;
+        
+    }
+}
