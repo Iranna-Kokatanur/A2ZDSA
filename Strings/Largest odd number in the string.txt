@@ -1,0 +1,17 @@
+https://leetcode.com/problems/largest-odd-number-in-string/description/
+
+class Solution {
+    public String largestOddNumber(String num) {
+
+        String even = "02468";
+
+        int  i = num.length() - 1;
+
+        for(; i>=0; i--){
+            if(!even.contains(num.charAt(i) + "")) break;
+        }
+
+        return num.substring(0, i + 1);
+        
+    }
+}
