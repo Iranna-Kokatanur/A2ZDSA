@@ -1,0 +1,50 @@
+https://leetcode.com/problems/remove-outermost-parentheses/description/
+
+// o(n) solution
+
+class Solution {
+    public String removeOuterParentheses(String s) {
+
+        int count = 0;
+
+        int idx = 0;
+
+        String ans = "";
+
+        /**
+        
+            Given the paranthesis is balanced, we need to remove outer loop 
+
+            (()())(()) -> This is splitting two balanced strings => (()()) + (()) -> we need to remove outer loops
+             --> ()() + () => ()()()
+
+             idx = 0
+             The approach is, check for the balaced string,
+
+             once '(' -> increase the count
+             once ')' -> decrease the count, check if count == 0, then take the partion string
+             and remove the outer string and assign the idx = current index + 1
+        
+         */
+
+        for(int i = 0; i<s.length(); i++){
+
+            char ch = s.charAt(i);
+
+            if(ch == '('){
+                count++;
+            }else if(ch == ')'){
+                count--;
+                //Removing the outer loops, when balanced partition found
+                if(count == 0){
+                    ans += s.substring(idx + 1, i);
+                    idx = i + 1;
+                }
+            }
+            
+        }
+
+        return ans;
+        
+    }
+}
