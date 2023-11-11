@@ -1,0 +1,40 @@
+https://www.codingninjas.com/studio/problems/subarrays-with-sum-%E2%80%98k'_6922076?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+// NOT BETTER SOLUTION
+
+import java.util.*;
+public class Solution {
+
+    public static List<List<Integer>> solve(int[] a, long k){
+
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for(int i = 0; i<a.length; i++){
+            List<Integer> list = new ArrayList<>();
+            long sum = 0;
+            for(int j = i; j<a.length; j++){
+                if(a[j] > k){
+                    break;
+                }
+                sum += a[j];
+                if(sum < k){
+                    list.add(a[j]);
+                }else if(sum == k){
+                    list.add(a[j]);
+                    break;
+                }
+            }
+
+            if(sum == k){
+                ans.add(new ArrayList<>(list));
+            }
+        }
+
+        return ans;
+
+    }
+    public static List< List < Integer > > subarraysWithSumK(int []a, long k) {
+       return solve(a, k);
+    }
+}
