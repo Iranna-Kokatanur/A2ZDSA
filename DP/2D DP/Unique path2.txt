@@ -1,0 +1,102 @@
+https://leetcode.com/problems/unique-paths-ii/description/
+
+class Solution {
+
+    private final static int MOD = (int)(2e9);
+
+    //recursion T.C : o(2 ^ (m * n))  S.C : o(m - 1 + n - 1)
+    public int solve(int m, int n, int[][] mat){
+        if(m >= 0 && n >= 0 && mat[m][n] == 1) return 0;
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+
+        int up = solve(m - 1, n, mat);
+        int left = solve(m, n - 1, mat);
+
+        return (up + left) % MOD;
+    }
+
+
+    // dp -> T. C -> o(m * n) s.c -> o(m - 1 + n - 1) + o(m * n)
+    public int solve(int m, int n, int [][] dp, int[][] mat){
+        if(m >= 0 && n >= 0 && mat[m][n] == 1) return 0;
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+
+        if(dp[m][n] != -1) return dp[m][n];
+        int up = solve(m - 1, n, dp, mat);
+        int left = solve(m, n - 1, dp, mat);
+
+        return dp[m][n] = (up + left) % MOD;
+    }
+
+
+    // Tabulation C -> o(m * n) s.c -> o(m * n)
+
+    public int solve2(int m, int n, int[][] dp, int[][] mat){
+
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                if(mat[i][j] == 1) dp[i][j] = 0;
+                else if(i == 0 && j == 0) dp[0][0] = 1;
+                else {
+                    int left = (j > 0)? dp[i][j - 1] : 0;
+                    int up = (i > 0)? dp[i - 1][j] : 0;
+                    dp[i][j] = left + up;
+                }
+                
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    // space optimization  o(m * n) s.c -> o(n)
+
+    public int solve3(int m, int n, int[] dp, int[][] mat){
+
+        Arrays.fill(dp, -1);
+
+        dp[0] = 1;
+
+        for(int i = 0; i < m; i++){
+            int temp[] = new int[n];
+            Arrays.fill(temp, 0);
+
+            for(int j = 0; j<n; j++){
+                if(mat[i][j] == 1) temp[j] = 0;
+                else if(i == 0 && j == 0) temp[0] = 1;
+                else{
+                    int left = (j > 0)? temp[j - 1] : 0;
+                    int up = (i > 0)? dp[j] : 0;
+
+                    temp[j] = left + up;
+                }
+            }
+
+            dp = temp;
+        }
+
+        return dp[n - 1];
+    }
+    public int uniquePathsWithObstacles(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+
+        // return solve(m - 1, n - 1, mat);
+
+        int[][] dp = new int[m][n];
+
+        for(int[] a: dp){
+            Arrays.fill(a, -1);
+        }
+
+        // return solve(m - 1, n - 1, dp, mat);
+
+        // return solve2(m, n, dp, mat);
+
+        int temp[] = new int[n];
+
+        return solve3(m, n, temp, mat);
+    }
+}
