@@ -1,0 +1,100 @@
+https://leetcode.com/problems/minimum-path-sum/description/
+
+class Solution {
+
+     //recursion T.C : o(2 ^ (m * n))  S.C : o(m - 1 + n - 1)
+
+    public int solve(int m, int n, int[][] grid){
+
+        if(m == 0 && n == 0) return grid[0][0];
+
+        if(m < 0 || n < 0) return 201;
+
+        int left = grid[m][n] + solve(m, n - 1, grid);
+        int up = grid[m][n] + solve(m - 1, n, grid);
+
+        return Math.min(left, up);
+    }
+
+    // dp -> T. C -> o(m * n) s.c -> o(m - 1 + n - 1) + o(m * n)
+    public int solve(int m, int n, int[][] grid, int[][] dp){
+
+        if(m == 0 && n == 0) return grid[0][0];
+
+        if(m < 0 || n < 0) return 201;
+
+        if(dp[m][n] != -1) return dp[m][n];
+
+        int left = grid[m][n] + solve(m, n - 1, grid);
+        int up = grid[m][n] + solve(m - 1, n, grid);
+
+        return dp[m][n] = Math.min(left, up);
+    }
+
+    // Tabulation C -> o(m * n) s.c -> o(m * n)
+    public int solve2(int m, int n, int[][] grid, int[][] dp){
+
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+
+                if(i == 0 && j == 0) dp[0][0] = grid[0][0];
+                else{
+                    int left = (j > 0)? grid[i][j] + dp[i][j - 1] : grid[i][j] + 201;
+                    int up = (i > 0)? grid[i][j] + dp[i - 1][j] : grid[i][j] + 201;
+                    dp[i][j] = Math.min(left, up);
+                }
+
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    // space optimization  o(m * n) s.c -> o(n)
+    
+    public int solve3(int m, int n, int[] dp, int[][] grid){
+
+        Arrays.fill(dp, -1);
+
+        dp[0] = grid[0][0];
+
+        for(int i = 0; i < m; i++){
+            int temp[] = new int[n];
+            Arrays.fill(temp, 0);
+
+            for(int j = 0; j<n; j++){
+                if(i == 0 && j == 0) temp[0] = grid[0][0];
+                else{
+                    int left = (j > 0)? grid[i][j] + temp[j - 1] : grid[i][j] + 201;
+                    int up = (i > 0)? grid[i][j] + dp[j] : grid[i][j] + 201;
+                    temp[j] = Math.min(left, up);
+                }
+            }
+
+            dp = temp;
+        }
+
+        return dp[n - 1];
+    }
+
+    public int minPathSum(int[][] grid) {
+
+        int m = grid.length;
+        int n = grid[0].length;
+
+        // return solve(m - 1, n - 1, grid);
+
+        int[][] dp = new int[m][n];
+
+        for(int[] a: dp) Arrays.fill(a, -1);
+
+        // return solve(m - 1, n - 1, grid, dp);   
+
+        // return solve2(m, n, grid, dp);   
+
+        int temp[] = new int[n];
+
+        return solve3(m, n, temp, grid);    
+
+    }
+}
