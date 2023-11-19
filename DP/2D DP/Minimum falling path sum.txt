@@ -1,0 +1,138 @@
+class Solution {
+
+    // recursion -> o(3^n) s.c -> stack space
+    int solve(int i, int j, int[][] matrix){
+        int m = matrix[0].length;
+
+        if(j < 0 || j >= m) return (int)(1e9);
+
+        if(i == 0) return matrix[0][j];
+
+        int up = matrix[i][j] + solve(i - 1, j, matrix);
+        int rd = matrix[i][j] + solve(i - 1, j + 1, matrix);
+        int ld = matrix[i][j] + solve(i - 1, j - 1, matrix);
+
+        return Math.min(ld, Math.min(rd, up));
+    }
+
+    // memoization ->  O(N*N),  O(N) + O(N*M)
+    int solve(int i, int j, int[][] matrix, int[][] dp){
+        int m = matrix[0].length;
+
+        if(j < 0 || j >= m) return (int)(1e9);
+
+        if(i == 0) return matrix[0][j];
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int up = matrix[i][j] + solve(i - 1, j, matrix, dp);
+        int rd = matrix[i][j] + solve(i - 1, j + 1, matrix, dp);
+        int ld = matrix[i][j] + solve(i - 1, j - 1, matrix, dp);
+
+        return dp[i][j] = Math.min(ld, Math.min(rd, up));
+    }
+
+    //tabulation ->  O(N*N),  O(N*M)
+    int solve(int[][] dp, int[][] matrix){
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        for(int j = 0; j<n; j++) dp[0][j] = matrix[0][j];
+
+        for(int i = 1; i<m; i++){
+            for(int j = 0; j<n; j++){
+                int up = matrix[i][j];
+                int rd = matrix[i][j];
+                int ld = matrix[i][j];
+
+                up += dp[i-1][j];
+
+                if(j > 0) ld += dp[i - 1][j - 1];
+                else ld += (int)(1e9);
+                if(j + 1 < m) rd += dp[i - 1][j + 1];
+                else rd += (int)(1e9);
+
+                dp[i][j] = Math.min(ld, Math.min(rd, up));
+            }
+
+        }
+
+        int ans = (int)(1e9);
+
+        for(int j = 0; j<n; j++){
+            ans = Math.min(ans, dp[m - 1][j]);
+        } 
+
+        return ans;
+    }
+
+    // space optimization -> O(N*N),  O(N)
+    int solve(int[][] matrix){
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[] dp = new int[n];
+
+        for(int j = 0; j<n; j++) dp[j] = matrix[0][j];
+        
+        for(int i = 1; i<m; i++){
+            int[] temp = new int[n];
+            for(int j = 0; j<n; j++){
+                int up = matrix[i][j];
+                int rd = matrix[i][j];
+                int ld = matrix[i][j];
+
+                up += dp[j];
+
+                if(j > 0) ld += dp[j - 1];
+                else ld += (int)(1e9);
+                if(j + 1 < m) rd += dp[j + 1];
+                else rd += (int)(1e9);
+
+                temp[j] = Math.min(ld, Math.min(rd, up));
+            }
+            dp = temp;
+        }
+
+        int ans = (int)(1e9);
+
+        for(int j = 0; j<n; j++){
+            ans = Math.min(ans, dp[j]);
+        } 
+
+        return ans;
+
+    }
+
+    public int minFallingPathSum(int[][] matrix) {
+
+        int m = matrix.length;
+
+        int n = matrix[0].length;
+
+        int ans = (int) 1e9;
+
+        // for(int j = 0; j<n; j++){
+        //     ans = Math.min(ans, solve(m - 1, j, matrix));
+        // }
+
+        // return ans;
+
+
+        int[][] dp = new int[m][n];
+
+        for(int[] a : dp) Arrays.fill(a, -1);
+
+        // for(int j = 0; j<n; j++){
+        //     ans = Math.min(ans, solve(m - 1, j, matrix, dp));
+        // }
+
+        // return ans;
+
+        // return solve(dp, matrix);
+
+
+        return solve(matrix);
+    }
+}
