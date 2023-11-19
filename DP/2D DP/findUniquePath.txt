@@ -1,0 +1,95 @@
+https://leetcode.com/problems/unique-paths/description/
+
+
+class Solution {
+
+    //recursion T.C : o(2 ^ (m * n))  S.C : o(m - 1 + n - 1)
+    public int solve(int m, int n){
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+
+        int up = solve(m - 1, n);
+        int left = solve(m, n - 1);
+
+        return up + left;
+    }
+
+    // dp -> T. C -> o(m * n) s.c -> o(m - 1 + n - 1) + o(m * n)
+    public int solve(int m, int n, int [][] dp){
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+
+        if(dp[m][n] != -1) return dp[m][n];
+        int up = solve(m - 1, n, dp);
+        int left = solve(m, n - 1, dp);
+
+        return dp[m][n] = up + left;
+    }
+
+
+    // Tabulation C -> o(m * n) s.c -> o(m * n)
+
+    public int solve2(int m, int n, int[][] dp){
+
+        dp[0][0] = 1;
+
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                if(i == 0 && j == 0) dp[0][0] = 1;
+                else {
+                    int left = (j > 0)? dp[i][j - 1] : 0;
+                    int up = (i > 0)? dp[i - 1][j] : 0;
+                    dp[i][j] = left + up;
+                }
+                
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    // space optimization  o(m * n) s.c -> o(n)
+
+    public int solve3(int m, int n, int[] dp){
+
+        Arrays.fill(dp, -1);
+
+        dp[0] = 1;
+
+        for(int i = 0; i < m; i++){
+            int temp[] = new int[n];
+            Arrays.fill(temp, 0);
+
+            for(int j = 0; j<n; j++){
+                if(i == 0 && j == 0) temp[0] = 1;
+                else{
+                    int left = (j > 0)? temp[j - 1] : 0;
+                    int up = (i > 0)? dp[j] : 0;
+
+                    temp[j] = left + up;
+                }
+            }
+
+            dp = temp;
+        }
+
+        return dp[n - 1];
+    }
+    public int uniquePaths(int m, int n) {
+        // return solve(m-1, n-1);
+
+        int [][] dp = new int[m][n];
+
+        for(int i = 0; i<m; i++){
+            Arrays.fill(dp[i], -1);
+        }
+
+        // return solve(m - 1, n - 1, dp);
+
+        // return solve2(m, n, dp);
+
+        int temp[] = new int[n];
+
+        return solve3(m, n, temp);
+    }
+}
