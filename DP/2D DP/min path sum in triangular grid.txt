@@ -1,4 +1,5 @@
 https://leetcode.com/problems/triangle/description/
+// fixed starting point and variable ending point
 
 class Solution {
 
