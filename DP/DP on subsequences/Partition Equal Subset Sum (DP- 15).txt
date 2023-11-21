@@ -1,0 +1,52 @@
+https://leetcode.com/problems/partition-equal-subset-sum/submissions/
+
+// It is same as the Subset sum equal to k, Just take the sum and  if it is even, take a half of it
+// Is that half sum is possible from the subsets are not. If it exist, other half obviouslt exist.
+
+class Solution {
+    public static boolean solve(int[] dp, int n, int k, int[] arr){
+
+        if (arr[0] <= k) {
+            dp[arr[0]] = 1;
+        }
+
+        for(int index = 1; index<n; index++){
+            dp[0] = 1;
+            int temp[] = new int[k + 1];
+            for(int target = 1; target <= k; target++){
+                boolean nottake = false;
+                nottake = dp[target] == 1;
+
+                boolean take = false;
+
+                if(target >= arr[index])
+                    take = dp[target - arr[index]] == 1;
+                
+                temp[target] = (take || nottake) ? 1 : 0;
+            }
+
+            dp = temp;
+        }
+
+        return dp[k] == 1;
+    }
+
+    public boolean canPartition(int[] nums) {
+        
+        int n = nums.length;
+
+        int sum = 0;
+
+        for(int i = 0; i<n; i++) sum += nums[i];
+
+        if(sum % 2 != 0) return false;
+        
+        int k = sum / 2;
+
+        int[] dp = new int[k + 1];
+
+        Arrays.fill(dp, -1);
+
+        return solve(dp, n, k, nums);
+    }
+}
