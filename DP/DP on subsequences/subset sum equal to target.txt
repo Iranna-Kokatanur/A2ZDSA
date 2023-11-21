@@ -1,0 +1,132 @@
+https://www.codingninjas.com/studio/problems/subset-sum-equal-to-k_1550954?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    // pick the element, and not pick the element
+    // check for every recursion whether the target coming as 0
+    // or if index == 0 then check whether arr[0] == target
+
+    // o(2 ^ n) stack space -  Recursion
+    public static boolean solve(int index, int target, int[] arr){
+        
+        if(target == 0) return true;
+
+        if(index == 0) return arr[0] == target;
+
+        boolean nottake = false;
+
+        nottake = solve(index - 1, target, arr);
+
+        boolean take = false;
+
+        if(target >= arr[index])
+            take = solve(index - 1, target - arr[index], arr);
+
+        return take || nottake;
+
+    }
+
+    // Memoization -> o(n * k) -> o(n * k) + stack space
+    public static int solve(int index, int target, int[] arr, int[][] dp){
+
+        if(target == 0) return 1;
+
+        if(index == 0) return arr[0] == target ? 1 : 0;
+
+        if(dp[index][target] != -1) return dp[index][target];
+        
+        boolean nottake = false;
+        
+        nottake = solve(index - 1, target, arr, dp) == 1;
+
+        boolean take = false;
+
+        if(target >= arr[index])
+            take = solve(index - 1, target - arr[index], arr, dp) == 1;
+
+        return dp[index][target] = (take || nottake) ? 1 : 0;
+    }
+
+    // Tabulation -> o(n * k) , o(n * k)
+    public static boolean solve(int[][] dp, int n, int k, int[] arr){
+        for(int i = 0; i<n; i++){
+            dp[i][0] = 1;
+        }
+
+        if (arr[0] <= k) {
+            dp[0][arr[0]] = 1;
+        }
+
+
+        for(int index = 1; index<n; index++){
+            for(int target = 1; target <= k; target++){
+                boolean nottake = false;
+                nottake = dp[index - 1][target] == 1;
+
+                boolean take = false;
+
+                if(target >= arr[index])
+                    take = dp[index - 1][target - arr[index]] == 1;
+                
+                dp[index][target] = (take || nottake) ? 1 : 0;
+            }
+        }
+
+        return dp[n-1][k] == 1;
+    }
+
+    // Space optimization -> o(n * k) , o(k)
+
+    public static boolean solve(int[] dp, int n, int k, int[] arr){
+
+        if (arr[0] <= k) {
+            dp[arr[0]] = 1;
+        }
+
+        for(int index = 1; index<n; index++){
+            dp[0] = 1;
+            int temp[] = new int[k + 1];
+            for(int target = 1; target <= k; target++){
+                boolean nottake = false;
+                nottake = dp[target] == 1;
+
+                boolean take = false;
+
+                if(target >= arr[index])
+                    take = dp[target - arr[index]] == 1;
+                
+                temp[target] = (take || nottake) ? 1 : 0;
+            }
+
+            dp = temp;
+        }
+
+        return dp[k] == 1;
+    }
+
+
+    public static boolean subsetSumToK(int n, int k, int arr[]){
+        // Write your code here.
+
+        // return solve(n - 1, k, arr);
+
+        //----------------------------
+        int[][] dp = new int[n + 1][k + 1];
+
+        for(int[] a: dp) Arrays.fill(a, -1);
+
+        // solve(n - 1, k, arr, dp);
+
+        // return dp[n-1][k] == 1;
+
+        //-------------------------
+
+        int[] temp = new int[k + 1];
+
+        Arrays.fill(temp, -1);
+
+        return solve(temp, n, k, arr);
+        
+    }
+}
