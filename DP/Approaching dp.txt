@@ -1,0 +1,36 @@
+Recursion
+----------------------------
+
+Write a base cases
+
+1) Represent the problem in terms of indices
+2) Try all possible stuffs on that index
+3) Take the min or max or according to the given problem
+
+DP - When overlapping subintervals will occur in recursion
+---------------------------------------------------------------
+Memoization - Top down approach - Recursion approach
+-----------------------------------------------------------
+Write a base cases
+1) Create dp array (depending on the variable changing)
+2) store the result in dp array
+3) if the result is already stored in the dp array no need to call the recursion for that interval
+
+Tabulation - Bottom up approach - Loop approach - Reduces stack space
+---------------------------------------------------------------------
+write a base cases
+
+Same logic as the memoization, just indexing is dead opposite of memoization
+
+Space optimization
+------------------------------------------------
+
+If any index - 1 condition is there in dp, we can create prev array
+
+And we can create cur array with the help of prev array.
+
+And make prev = cur
+
+// if is 2d dp -> create 1d dp prev, 1dp cur array
+// if it is 1d dp -> just variable like prev is enough
+
