@@ -1,0 +1,159 @@
+https://www.codingninjas.com/studio/problems/0-1-knapsack_920542?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
+
+import java.util.* ;
+import java.io.*; 
+
+public class Solution{
+
+    // Recursion o(2^n), o(n) stack space
+    static int solve(int index, int W, int[] weight, int[] value){
+        
+        if(index == 0){
+            if(weight[0] <= W) return value[0];
+            return 0;
+        }
+
+        //not pick the weight
+
+        int notpick = solve(index - 1, W, weight, value);
+
+        int pick = Integer.MIN_VALUE;
+
+        //pick the weight
+
+        if(weight[index] <= W)
+            pick = value[index] + solve(index - 1, W - weight[index], weight, value);
+
+        return Math.max(pick, notpick);
+
+    }
+
+    // Memoization o(n * w), o(n * w) + stack space
+    static int solve(int index, int W, int[] weight, int[] value, int[][] dp){
+        
+        if(index == 0){
+            if(weight[0] <= W) return value[0];
+            return 0;
+        }
+
+        if(dp[index][W] != -1) return dp[index][W];
+        //not pick the weight
+
+        int notpick = solve(index - 1, W, weight, value, dp);
+
+        int pick = Integer.MIN_VALUE;
+
+        // pick the weight
+
+        if(weight[index] <= W)
+            pick = value[index] + solve(index - 1, W - weight[index], weight, value, dp);
+
+        return dp[index][W] = Math.max(pick, notpick);
+
+    }
+
+    // Tabulation o(n * w), o(n * w) 
+    static int solve(int[][] dp, int[] weight, int[] value, int n, int W){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[0][i] = value[0];
+
+        for(int index = 1; index < n; index++){
+            for(int target = 0; target <= W; target++){
+                int notpick = dp[index - 1][target];
+
+                int pick = Integer.MIN_VALUE;
+
+                if(weight[index] <= target)
+                    pick = value[index] + dp[index - 1][target - weight[index]];
+                
+                dp[index][target] = Math.max(pick, notpick);
+            }
+        }
+
+        return dp[n-1][W];
+
+    }
+
+    // space optimization o(n * w), o(w) 
+    static int solve(int[] dp, int[] weight, int[] value, int W, int n){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[i] = value[0];
+
+        for(int index = 1; index < n; index++){
+            int[] temp = new int[W + 1];
+            for(int target = 0; target <= W; target++){
+                int notpick = dp[target];
+
+                int pick = Integer.MIN_VALUE;
+
+                if(weight[index] <= target)
+                    pick = value[index] + dp[target - weight[index]];
+                
+                temp[target] = Math.max(pick, notpick);
+            }
+
+            dp = temp;
+        }
+
+        return dp[W];
+
+    }
+
+    // space optimization without using temp array o(n * w), o(w) 
+    static int solveUsingWithoutTemp(int[] dp, int[] weight, int[] value, int W, int n){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[i] = value[0];
+
+        // here the result is depending on the previous row 
+        // if you start filling from W to 0 it will never override the values
+        // So, no need of using temp array, we can modify the dp array only
+        for(int index = 1; index < n; index++){
+            for(int target = W; target >= 0; target--){
+                int notpick = dp[target];
+
+                int pick = Integer.MIN_VALUE;
+
+                if(weight[index] <= target)
+                    pick = value[index] + dp[target - weight[index]];
+                
+                dp[target] = Math.max(pick, notpick);
+            }
+        }
+
+        return dp[W];
+
+    }
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+
+            /* Your class should be named Solution
+            * Don't write main().
+            * Don't read input, it is passed as function argument.
+            * Change in the given tree itself.
+            * No need to return or print the output.
+            * Taking input and printing output is handled automatically.
+            */
+        // return solve(n - 1, maxWeight, weight, value);
+
+        // int[][] dp = new int[n][maxWeight + 1];
+
+        // for(int[] a: dp) Arrays.fill(a, -1);
+
+        // return solve(n - 1, maxWeight, weight, value, dp);
+
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // return solve(dp, weight, value, n, maxWeight);
+
+        int[] temp = new int[maxWeight + 1];
+        
+        Arrays.fill(temp, 0);
+
+        // return solve(temp, weight, value, maxWeight, n);
+
+        return solveUsingWithoutTemp(temp, weight, value, maxWeight, n);
+
+    }
+}
