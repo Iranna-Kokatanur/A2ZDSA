@@ -73,7 +73,7 @@ public class Solution {
     }
 
 
-     // Memoization -> o(n * target), o(n * target)
+     // Tabulation -> o(n * target), o(n * target)
     public static int solve(int[][] dp, int[] num, int k){
 
         // Base cases
@@ -112,7 +112,7 @@ public class Solution {
         return dp[n-1][k];
     }
 
-    // tabulation -> o(n * target), o(target)
+    // space optimization -> o(n * target), o(target)
     
     public static int solve(int[] dp, int[] num, int k){
 
