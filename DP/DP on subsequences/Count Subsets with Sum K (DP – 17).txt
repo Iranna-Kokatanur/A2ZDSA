@@ -1,5 +1,30 @@
 https://www.codingninjas.com/studio/problems/count-subsets-with-sum-k_3952532?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=SUBMISSION
 
+// when arr[i] having 0s
+
+public static int solve(int index, int target, int[] num){
+
+        if(index == 0)
+        	if(arr[0] == 0 && sum == 0) return 2;
+        	if(sum == 0 || sum == arr[0]) return 1;
+        	return 0; 
+
+        int notpick = 0;
+
+        //not pick the element
+        notpick = solve(index - 1, target, num);
+
+        int pick = 0;
+
+        //pickt the element
+        if(num[index] <= target) pick = solve(index - 1, target - num[index], num);
+
+        return (pick + notpick) % mod;
+    }
+
+
+// when arr[i] not having 0s
+
 import java.util.*;
 import java.io.*;
 
