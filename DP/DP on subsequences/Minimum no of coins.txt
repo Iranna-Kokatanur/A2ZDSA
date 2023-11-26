@@ -1,0 +1,164 @@
+https://leetcode.com/problems/coin-change/description/
+
+class Solution {
+    
+    // Recursion -> >> o(2 ^ n) , S.C -> >> o(n) almost it goes up to o(target)
+    public int solve(int index, int target, int coins[]){
+
+        if(index == 0){
+
+            if(target % coins[0] == 0) return target / coins[0];
+
+            return (int)(1e9);
+        }
+        // not pick the coin
+
+        int notpick = solve(index - 1, target, coins);
+
+        //pick the coin, and be at the same index because we can use same coin infinite times
+
+        int pick = Integer.MAX_VALUE;
+
+        if(target >= coins[index]) pick = 1 + solve(index, target - coins[index], coins);
+
+        return Math.min(pick, notpick);
+    }
+
+    // Memoization -> o(n * target), o(n * target) + o(target)
+    public int solve(int index, int target, int coins[], int[][] dp){
+
+        if(index == 0){
+
+            if(target % coins[0] == 0) return target / coins[0];
+
+            return (int)(1e9);
+        }
+
+        if(dp[index][target] != -1) return dp[index][target];
+
+        // not pick the coin
+
+        int notpick = solve(index - 1, target, coins, dp);
+
+        //pick the coin, and be at the same index because we can use same coin infinite times
+
+        int pick = Integer.MAX_VALUE;
+
+        if(target >= coins[index]) pick = 1 + solve(index, target - coins[index], coins, dp);
+
+        return dp[index][target] = Math.min(pick, notpick);
+    }
+
+    // Tabulation - o(n * target), o(n * target)
+
+    public int solve(int[][] dp, int[] coins, int n, int amount){
+
+
+        // Base case
+
+        for(int t = 0; t <= amount; t++){
+            if(t % coins[0] == 0) dp[0][t] = t / coins[0];
+
+            else dp[0][t] = (int)(1e9);
+            
+        }
+
+        for(int index = 1; index < n; index++){
+            for(int target = 0; target <= amount; target++){
+                // not pick the coin
+
+                int notpick = dp[index - 1][target];
+
+                //pick the coin, and be at the same index because we can use same coin infinite times
+
+                int pick = Integer.MAX_VALUE;
+
+                if(target >= coins[index]) pick = 1 + dp[index][target - coins[index]];
+
+                dp[index][target] = Math.min(pick, notpick);
+            }
+        }
+
+        return dp[n-1][amount];
+    }
+
+    // space optimization -> o(n * target), o(n * target)
+    public int solve(int[] dp, int[] coins, int n, int amount){
+
+
+        // Base case
+
+        for(int t = 0; t <= amount; t++){
+            if(t % coins[0] == 0) dp[t] = t / coins[0];
+
+            else dp[t] = (int)(1e9);
+            
+        }
+
+        for(int index = 1; index < n; index++){
+            int[] temp = new int[amount + 1];
+            Arrays.fill(temp, 0);
+            for(int target = 0; target <= amount; target++){
+                // not pick the coin
+
+                int notpick = dp[target];
+
+                //pick the coin, and be at the same index because we can use same coin infinite times
+
+                int pick = Integer.MAX_VALUE;
+
+                if(target >= coins[index]) pick = 1 + temp[target - coins[index]];
+
+                temp[target] = Math.min(pick, notpick);
+            }
+
+            dp = temp;
+        }
+
+        return dp[amount];
+    }
+
+    public int coinChange(int[] coins, int amount) {
+        
+        int n = coins.length;
+
+        // int ans = solve(n - 1, amount, coins);
+
+        // if(ans != (int)(1e9)) return ans;
+
+        // return -1;
+        //-----------------------------------------------------
+        // int[][] dp = new int[n][amount + 1];
+
+        // for(int[] a: dp) Arrays.fill(a, -1);
+
+        // int ans = solve(n - 1, amount, coins, dp);
+
+        // if(ans != (int)(1e9)) return ans;
+
+        // return -1;
+        // -------------------------------------------------------
+        // int[][] dp = new int[n][amount + 1];
+
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // int ans = solve(dp, coins, n, amount);
+
+        // if(ans >= (int)(1e9)) return -1;
+
+        // return ans;
+
+        //---------------------------------------------------------------
+
+        int [] dp = new int[amount + 1];
+
+        Arrays.fill(dp, 0);
+
+        int ans = solve(dp, coins, n, amount);
+
+        if(ans >= (int)(1e9)) return -1;
+
+        return ans;
+
+    }
+}
