@@ -1,0 +1,67 @@
+https://leetcode.com/problems/target-sum/description/
+
+class Solution {
+
+    // We can solve this using Count Partitions with Given Difference (DP – 18)
+
+    // [1, 2, 3, 4] -> assign randomly + , -
+    // +1 -2 -3 +4 -> it becomes like (1+4) - (2+3) -> s1 - s2 
+
+    // Space Optimization -> o(n * target), o(target)
+     public static int solve(int[] dp, int[] num, int k){
+
+        // Base cases
+
+        // when target is 0 
+
+        int n = num.length;
+
+        
+        if(num[0] == 0) dp[0] = 2; // pick or not pick
+		else dp[0] = 1; // one option
+        
+
+        // when index == 0
+        if(num[0] != 0 && num[0] <= k){
+            dp[num[0]] = 1;
+        }
+
+        // compute the ans
+
+        for(int index = 1; index<n; index++){
+            int[] temp = new int[k+1];
+            Arrays.fill(temp, 0);
+            for(int target = 0; target <= k; target++){
+                int notpick = 0;
+
+                notpick = dp[target];
+
+                int pick = 0;
+
+                if(num[index] <= target) pick = dp[target - num[index]];
+
+                temp[target] = (pick + notpick);
+            }
+            dp = temp;
+        }
+
+        return dp[k];
+    }
+
+
+    public int findTargetSumWays(int[] nums, int d) {
+        int totalsum = 0;
+
+        int n = nums.length;
+
+        for(int i = 0; i<n; i++) totalsum += nums[i];
+
+        if(totalsum - d < 0 || (totalsum - d) % 2 == 1) return 0;
+
+        int[] dp = new int[(totalsum - d) / 2 + 1];
+
+        Arrays.fill(dp, 0);
+
+		return solve(dp, nums, (totalsum - d) / 2);
+    }
+}
