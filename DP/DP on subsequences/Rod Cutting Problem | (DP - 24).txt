@@ -1,0 +1,166 @@
+https://www.codingninjas.com/studio/problems/rod-cutting-problem_800284?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+import java.util.Arrays;
+
+public class Solution {
+
+	// Recursion -> >> o(2^n), >> o(n) goes up to o(target)
+	public static int solve(int index, int target, int price[]){
+
+		if(index == 0){
+			return price[0] * target;
+		}
+
+		// not pick
+		int notpick = solve(index - 1, target, price);
+
+		int rodLength = index + 1;
+
+		// pick
+		int pick = Integer.MIN_VALUE;
+
+		// To pick the rod it should be less than given target length
+		if(rodLength <= target)
+			pick = price[index] + solve(index, target - rodLength, price);
+
+		return Math.max(notpick, pick);
+
+	}
+
+	// Memoization -> o(n * target), o(n * target) + o(target)
+	public static int solve(int index, int target, int price[], int[][] dp){
+
+		if(index == 0){
+
+			return price[0] * target;
+		}
+
+		if(dp[index][target] != -1) return dp[index][target];
+
+		// not pick 
+		int notpick = solve(index - 1, target, price, dp);
+
+		int rodLength = index + 1;
+
+		int pick = Integer.MIN_VALUE;
+
+		if(rodLength <= target)
+			pick = price[index] + solve(index, target - rodLength, price, dp);
+
+		return dp[index][target] = Math.max(notpick, pick);
+
+	}
+
+	// Tabulation -> o(n * target), o(n * target)
+	static int solve(int[][] dp, int[] price, int n, int k){
+        
+		// Base case 
+        for(int i = 0; i<=k; i++) dp[0][i] = price[0] * i;
+
+        for(int index = 1; index < n; index++){
+            for(int target = 0; target <= k; target++){
+                int notpick = dp[index - 1][target];
+
+				int rodLength = index + 1;
+
+				int pick = Integer.MIN_VALUE;
+
+				if(rodLength <= target)
+					pick = price[index] + dp[index][target - rodLength];
+
+				dp[index][target] = Math.max(notpick, pick);
+            }
+        }
+
+        return dp[n-1][k];
+
+    }
+
+	//Space Optimization -> o(n * target), o(target)
+	static int solve(int[] dp, int[] price, int n, int k){
+        
+		// Base case 
+        for(int i = 0; i<=k; i++) dp[i] = price[0] * i;
+
+        for(int index = 1; index < n; index++){
+			int[] temp = new int[k+1];
+			Arrays.fill(temp, 0);
+            for(int target = 0; target <= k; target++){
+                int notpick = dp[target];
+
+				int rodLength = index + 1;
+
+				int pick = Integer.MIN_VALUE;
+
+				if(rodLength <= target)
+					pick = price[index] + temp[target - rodLength];
+
+				temp[target] = Math.max(notpick, pick);
+            }
+
+			dp = temp;
+        }
+
+        return dp[k];
+
+    }
+
+	//Space Optimization -> o(n * target), o(target) without using temp array
+	static int solve1(int[] dp, int[] price, int n, int k){
+        
+		// Base case 
+        for(int i = 0; i<=k; i++) dp[i] = price[0] * i;
+
+        for(int index = 1; index < n; index++){
+		
+            for(int target = 0; target <= k; target++){
+                int notpick = dp[target];
+
+				int rodLength = index + 1;
+
+				int pick = Integer.MIN_VALUE;
+
+				// It just requires target - rodLength
+				if(rodLength <= target)
+					pick = price[index] + dp[target - rodLength];
+
+				dp[target] = Math.max(notpick, pick);
+            }
+        }
+
+        return dp[k];
+
+    }
+	public static int cutRod(int price[], int n) {
+		// Write your code here.
+
+		int N = price.length;
+
+		// return solve(N - 1, n, price);
+
+		//----------------------------------------------
+
+		// int[][] dp = new int[N][n+1];
+
+		// for(int[] a: dp) Arrays.fill(a, -1);
+
+		// return solve(N - 1, n, price, dp);
+
+		// -------------------------------------------------
+
+		// for(int[] a: dp) Arrays.fill(a, 0);
+
+		// return solve(dp, price, N, n);
+
+		//-----------------------------------------
+
+
+		int[] dp = new int[n+1];
+
+		Arrays.fill(dp, 0);
+
+		// return solve(dp, price, N, n);
+
+		return solve1(dp, price, N, n);
+	}
+}
