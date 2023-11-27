@@ -1,0 +1,149 @@
+https://leetcode.com/problems/coin-change-ii/description/
+
+class Solution {
+     // Recursion -> >> o(2 ^ n) , S.C -> >> o(n) almost it goes up to o(target)
+    public int solve(int index, int target, int coins[]){
+
+        if(index == 0){
+
+            if(target % coins[0] == 0) return 1;
+
+            return 0;
+        }
+        // not pick the coin
+
+        int notpick = solve(index - 1, target, coins);
+
+        //pick the coin, and be at the same index because we can use same coin infinite times
+
+        int pick = 0;
+
+        if(target >= coins[index]) pick = solve(index, target - coins[index], coins);
+
+        return pick + notpick;
+    }
+
+    // Memoization -> o(n * target), o(n * target) + o(n)
+    public int solve(int index, int target, int coins[], int[][] dp){
+
+        if(index == 0){
+
+            if(target % coins[0] == 0) return 1;
+
+            return 0;
+        }
+
+        if(dp[index][target] != -1) return dp[index][target];
+        // not pick the coin
+
+        int notpick = solve(index - 1, target, coins, dp);
+
+        //pick the coin, and be at the same index because we can use same coin infinite times
+
+        int pick = 0;
+
+        if(target >= coins[index]) pick = solve(index, target - coins[index], coins, dp);
+
+        return dp[index][target] = pick + notpick;
+    }
+
+    // Tabulation -> o(n * target), o(n * target)
+    public int solve2(int n, int k, int coins[], int[][] dp){
+
+        // base case 
+
+        for(int t = 0; t<= k; t++){
+            dp[0][t] = (t % coins[0] == 0)?1:0;
+        }
+        
+        for(int index = 1; index <n; index++){
+             for(int target = 0; target <= k; target++){
+                int notpick = dp[index - 1][target];
+
+                //pick the coin, and be at the same index because we can use same coin infinite times
+
+                int pick = 0;
+
+                if(target >= coins[index]) pick = dp[index][target - coins[index]];
+
+                dp[index][target] = pick + notpick;
+             }
+        }
+
+
+        return dp[n - 1][k];
+
+    }
+
+     // Space Optimization -> o(n * target), o(target)
+    public int solve3(int n, int k, int coins[], int[] dp){
+
+        // base case 
+
+        for(int t = 0; t<= k; t++){
+            dp[t] = (t % coins[0] == 0)?1:0;
+        }
+        
+        for(int index = 1; index <n; index++){
+            int[] temp = new int[k+1];
+            Arrays.fill(temp, 0);
+             for(int target = 0; target <= k; target++){
+                int notpick =dp[target];
+
+                //pick the coin, and be at the same index because we can use same coin infinite times
+
+                int pick = 0;
+
+                if(target >= coins[index]) pick = temp[target - coins[index]];
+
+                temp[target] = pick + notpick;
+             }
+
+             dp = temp;
+        }
+
+
+        return dp[k];
+
+    }
+
+    public int change(int amount, int[] coins) {
+        int n = coins.length;
+
+        // int ans = solve(n - 1, amount, coins);
+
+        // return ans;
+
+        //----------------------------------
+
+        // int[][] dp = new int[n][amount+1];
+
+        // for(int[] a: dp) Arrays.fill(a, -1);
+
+        // int ans = solve(n - 1, amount, coins, dp);
+
+        // return ans;
+
+        //-----------------------------------
+
+        // int[][] dp = new int[n][amount+1];
+
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // int ans = solve2(n, amount, coins, dp);
+
+        // return ans;
+
+        //--------------------------------
+
+        int[] dp = new int[amount+1];
+
+        Arrays.fill(dp, 0);
+
+        int ans = solve3(n, amount, coins, dp);
+
+        return ans;
+    }
+
+
+}
