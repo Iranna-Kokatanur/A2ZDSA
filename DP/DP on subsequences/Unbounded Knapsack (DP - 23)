@@ -1,0 +1,164 @@
+https://www.codingninjas.com/studio/problems/unbounded-knapsack_1215029?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+import java.util.Arrays;
+public class Solution {
+
+     // Recursion >> o(2^n), >> o(n) -> o(target)
+    static int solve(int index, int W, int[] weight, int[] value){
+        
+        if(index == 0){
+            // Infinite supply, max he can pick W/weight[0] weight
+            if(weight[0] <= W) return value[0] * (W / weight[0]);
+            return 0;
+        }
+
+        //not pick the weight
+
+        int notpick = solve(index - 1, W, weight, value);
+
+        int pick = Integer.MIN_VALUE;
+
+        //pick the weight
+
+        // infinite supply so, we can stick on one index also
+        if(weight[index] <= W)
+            pick = value[index] + solve(index, W - weight[index], weight, value);
+
+        return Math.max(pick, notpick);
+
+    }
+
+     // Memoization o(n * w), o(n * w) + stack space
+    static int solve(int index, int W, int[] weight, int[] value, int[][] dp){
+        
+        if(index == 0){
+            // Infinite supply, max he can pick W/weight[0] weight
+            if(weight[0] <= W) return value[0] * (W / weight[0]);
+            return 0;
+        }
+
+        if(dp[index][W] != -1) return dp[index][W];
+
+        //not pick the weight
+
+        int notpick = solve(index - 1, W, weight, value, dp);
+
+        int pick = Integer.MIN_VALUE;
+
+        //pick the weight
+
+        // infinite supply so, we can stick on one index also
+        if(weight[index] <= W)
+            pick = value[index] + solve(index, W - weight[index], weight, value, dp);
+
+        return dp[index][W] = Math.max(pick, notpick);
+
+    }
+
+
+     // Tabulation o(n * w), o(n * w) 
+    static int solve(int[][] dp, int[] weight, int[] value, int n, int W){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[0][i] = value[0] * (i / weight[0]);
+
+        for(int index = 1; index < n; index++){
+            for(int target = 0; target <= W; target++){
+                int notpick = dp[index - 1][target];
+
+                int pick = Integer.MIN_VALUE;
+
+                if(weight[index] <= target)
+                    pick = value[index] + dp[index][target - weight[index]];
+                
+                dp[index][target] = Math.max(pick, notpick);
+            }
+        }
+
+        return dp[n-1][W];
+
+    }
+
+     // space optimization o(n * w), o(w) 
+    static int solve(int[] dp, int[] weight, int[] value, int W, int n){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[i] = value[0]* (i / weight[0]);;
+
+        for(int index = 1; index < n; index++){
+            int[] temp = new int[W + 1];
+            for(int target = 0; target <= W; target++){
+                int notpick = dp[target];
+
+                int pick = Integer.MIN_VALUE;
+
+                if(weight[index] <= target)
+                    pick = value[index] + temp[target - weight[index]];
+                
+                temp[target] = Math.max(pick, notpick);
+            }
+
+            dp = temp;
+        }
+
+        return dp[W];
+
+    }
+
+    // space optimization o(n * w), o(w) - without using temp array
+    static int solveUsingWithoutTemp(int[] dp, int[] weight, int[] value, int W, int n){
+        
+        for(int i = weight[0]; i<=W; i++)
+            if(weight[0] <= i) dp[i] = value[0]* (i / weight[0]);;
+
+        for(int index = 1; index < n; index++){
+            for(int target = 0; target <= W; target++){
+                int notpick = dp[target];
+
+                int pick = Integer.MIN_VALUE;
+
+                // Here pick requires target - weight[index] < target
+                // we can use same dp array to store the value again
+
+                // if(weight[index] <= target)
+                //     pick = value[index] + temp[target - weight[index]];
+
+                if(weight[index] <= target)
+                    pick = value[index] + dp[target - weight[index]];
+                
+                dp[target] = Math.max(pick, notpick);
+            }
+        }
+
+        return dp[W];
+
+    }
+    public static int unboundedKnapsack(int n, int w, int[] profit, int[] weight) {
+        // Write your code here.
+
+        //  return solve(n - 1, w, weight, profit);
+
+        // ------------------------------------------------
+        // int[][] dp = new int[n][w+1];
+
+        // for(int[] a: dp) Arrays.fill(a, -1);
+
+        // return solve(n - 1, w, weight, profit, dp);  
+
+        // ---------------------------------------------------
+
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // return solve(dp, weight, profit, n, w);
+
+        //--------------------------------
+      
+        int[] temp = new int[w + 1];
+        
+        Arrays.fill(temp, 0);
+
+        // return solve(temp, weight, profit, w, n);
+
+        return solveUsingWithoutTemp(temp, weight, profit, w, n);
+    }
+}
