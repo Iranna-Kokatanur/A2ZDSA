@@ -1,0 +1,21 @@
+Approaching the DP on Subsequence problem
+
+// Recursion
+1) Make sure that represent the function in terms of index, target
+2) Do possible stuffs like pick or not pick on that index
+3) Take max, min, count based on what asked in given problem
+
+// DP 
+// Memoization
+If there any overlapping
+
+1) create dp[index][target+1]
+2) base case
+3) Do the same function as did the recursion
+
+// Tabulation same but using for loop - bottom up
+
+// space optimization -> create dp[target+1]
+
+1) base condition
+2) create temp and store it, assign it to dp array again
