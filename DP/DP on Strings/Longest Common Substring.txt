@@ -1,0 +1,107 @@
+https://www.codingninjas.com/studio/problems/longest-common-substring_1235207?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+import java.util.*;
+
+public class Solution {
+    
+    // It is same as Longest consecutive subsequence but we dont need to index - 1 for one string
+    // and keep the index for string2 and vice versa
+    // we can keep dp[index1][index2] = 0 because it is substring not subsequence
+
+     // Tabulation -> o(n1 * n2), o(n1 * n2)
+    public static int lcs(int[][] dp, int n1, int n2, String text1, String text2){
+
+        // Base case
+        for(int i = 0; i<=n1; i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 0; i<=n2; i++){
+            dp[0][i] = 0;
+        }
+        
+        int ans = 0;
+
+        for(int index1 = 1; index1 <= n1; index1++){
+            for(int index2 = 1; index2 <= n2; index2++){
+                if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1)){
+                    dp[index1][index2] = 1+ dp[index1 - 1][index2 - 1];
+                    ans = Math.max(dp[index1][index2], ans);
+                }   
+                else {
+                    // commenting this logic because it is substring so, we should not 
+                    // eliminate one character and compare it
+                    // int first = dp[index1 - 1][index2];
+                    // int second = dp[index1][index2 - 1];
+                    // dp[index1][index2] = Math.max(first, second);
+
+                    dp[index1][index2] = 0;
+                    
+                }
+                
+            }
+        }
+
+        return ans;
+
+    }
+
+    // space optimization  o(n1 * n2), o(n2)
+    public static int lcs(int[] dp, int n1, int n2, String text1, String text2){
+
+        // Base case
+
+        for(int i = 0; i<=n2; i++){
+            dp[i] = 0;
+        }
+        
+        int ans = 0;
+
+        for(int index1 = 1; index1 <= n1; index1++){
+            int[] temp = new int[n2+1]; Arrays.fill(temp, 0);
+            for(int index2 = 1; index2 <= n2; index2++){
+                if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1)){
+                    temp[index2] = 1+ dp[index2 - 1];
+                    ans = Math.max(temp[index2], ans);
+                }   
+                else {
+                    // commenting this logic because it is substring so, we should not 
+                    // eliminate one character and compare it
+                    // int first = dp[index1 - 1][index2];
+                    // int second = dp[index1][index2 - 1];
+                    // dp[index1][index2] = Math.max(first, second);
+
+                    temp[index2] = 0;
+                    
+                }
+                
+            }
+
+            dp = temp;
+        }
+
+        return ans;
+
+    }
+    public static int lcs(String text1, String text2){
+        // Write your code here.
+
+        int n1 = text1.length();
+        int n2 = text2.length();
+
+        //  int[][] dp = new int[n1 + 1][n2 + 1];
+
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // return lcs(dp, n1, n2, text1, text2);
+
+        //-------------------------------------------------
+
+        int[] dp = new int[n2 + 1];
+
+        Arrays.fill(dp, 0);
+
+        return lcs(dp, n1, n2, text1, text2);
+    }
+
+}
