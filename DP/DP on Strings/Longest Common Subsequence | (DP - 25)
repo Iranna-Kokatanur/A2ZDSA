@@ -1,0 +1,136 @@
+https://leetcode.com/problems/longest-common-subsequence/description/
+class Solution {
+    
+    // Just take the parameter from length of the string so, we can end up at index == 0 where we can return
+    // the base case
+
+    // o(2 ^ n1 * 2 ^ n2)
+    public int lcs(int index1, int index2, String text1, String text2){
+
+        // one of the index == 0 then we consider end of the string I mean no string to compare
+        if(index1 == 0 || index2 == 0) return 0;
+
+        // if character are matching acd, bcd -> d & d matching
+        // then go for previous index to match the other characters
+
+        if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1))
+            return 1+lcs(index1 - 1, index2 - 1, text1, text2);
+
+        // Move to previous index for first String and keep the index of second string as it is
+        // ae, ba -> index1 - 1
+
+        int first = lcs(index1 - 1, index2, text1, text2);
+
+        // Keep index for first String and move the index of second string to previous 
+        // ba, ae -> index2  - 1
+        int second = lcs(index1, index2 - 1, text1, text2);
+
+        return Math.max(first, second);
+    }
+
+    // Memoization -> o(n1 * n2), o(n1 * n2) + o(n1 + n2)
+    public int lcs(int index1, int index2, String text1, String text2, int[][] dp){
+
+        // one of the index == 0 then we consider end of the string I mean no string to compare
+        if(index1 == 0 || index2 == 0) return 0;
+
+        // if character are matching acd, bcd -> d & d matching
+        // then go for previous index to match the other characters
+
+        if(dp[index1][index2] != -1) return dp[index1][index2];
+
+        if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1))
+            return dp[index1][index2] = 1+lcs(index1 - 1, index2 - 1, text1, text2, dp);
+
+        // Move to previous index for first String and keep the index of second string as it is
+        // ae, ba -> index1 - 1
+
+        int first = lcs(index1 - 1, index2, text1, text2, dp);
+
+        // Keep index for first String and move the index of second string to previous 
+        // ba, ae -> index2  - 1
+        int second = lcs(index1, index2 - 1, text1, text2, dp);
+
+        return dp[index1][index2] = Math.max(first, second);
+    }
+
+   // Tabulation -> o(n1 * n2), o(n1 * n2)
+    public int lcs(int[][] dp, int n1, int n2, String text1, String text2){
+
+        // Base case
+        for(int i = 0; i<=n1; i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 0; i<=n2; i++){
+            dp[0][i] = 0;
+        }
+
+        for(int index1 = 1; index1 <= n1; index1++){
+            for(int index2 = 1; index2 <= n2; index2++){
+                if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1))
+                    dp[index1][index2] = 1+ dp[index1 - 1][index2 - 1];
+                else {
+                    int first = dp[index1 - 1][index2];
+                    int second = dp[index1][index2 - 1];
+                    dp[index1][index2] = Math.max(first, second);
+                }
+                
+            }
+        }
+
+        return dp[n1][n2];
+    }
+
+    // Space Optimization -> o(n1 * n2), o(n2)
+    public int lcs(int[] dp, int n1, int n2, String text1, String text2){
+
+        // Base case
+
+        for(int i = 0; i<=n2; i++){
+            dp[i] = 0;
+        }
+
+        for(int index1 = 1; index1 <= n1; index1++){
+            int[] temp = new int[n2 + 1];
+            Arrays.fill(temp, 0);
+            for(int index2 = 1; index2 <= n2; index2++){
+                if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1))
+                    temp[index2] = 1+ dp[index2 - 1];
+                else {
+                    int first = dp[index2];
+                    int second = temp[index2 - 1];
+                    temp[index2] = Math.max(first, second);
+                }
+                
+            }
+            dp = temp;
+        }
+
+        return dp[n2];
+    }
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        
+        int n1 = text1.length();
+        int n2 = text2.length();
+
+        // return lcs(n1, n2, text1, text2);
+        //-------------------------------------------
+        // int[][] dp = new int[n1 + 1][n2 + 1];
+
+        // for(int[] a: dp) Arrays.fill(a, -1);
+
+        // return lcs(n1, n2, text1, text2, dp);
+        //----------------------------------------------
+        // for(int[] a: dp) Arrays.fill(a, 0);
+
+        // return lcs(dp, n1, n2, text1, text2);
+        //------------------------------------------
+        int[] dp = new int[n2 + 1];
+
+        Arrays.fill(dp, 0);
+
+        return lcs(dp, n1, n2, text1, text2);
+    }
+}
