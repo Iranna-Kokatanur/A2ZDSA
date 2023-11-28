@@ -1,5 +1,6 @@
 https://www.codingninjas.com/studio/problems/print-longest-common-subsequence_8416383?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
 
+// It is same as the Longest consecutive subsequence but adding extra logic to print it
 import java.util.Arrays;
 public class Solution {
 
@@ -31,9 +32,10 @@ public class Solution {
         // return dp[n1][n2];
 
         int i = n1, j = n2;
-
+        
         String ans = "";
 
+        // if characters are matching then add it to the ans otherwise go for else part
         while(i > 0 && j > 0){
             if(text1.charAt(i) == text2.charAt(j)){
                 ans += text1.charAt(i);
