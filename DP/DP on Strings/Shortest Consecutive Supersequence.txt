@@ -1,0 +1,87 @@
+https://leetcode.com/problems/shortest-common-supersequence/description/
+
+class Solution {
+
+    // Shortest common supersequence where it has all the characters of both the strings
+
+    /**
+
+        e.g : abac, cab => cabac 
+
+        we can implement this by LCS logic, but we need to include other than common character also
+
+     */
+
+     // Tabulation -> o(n1 * n2), o(n1 * n2)
+    public static String lcs(int[][] dp, int n1, int n2, String text1, String text2){
+
+        // Base case
+        for(int i = 0; i<=n1; i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 0; i<=n2; i++){
+            dp[0][i] = 0;
+        }
+
+        for(int index1 = 1; index1 <= n1; index1++){
+            for(int index2 = 1; index2 <= n2; index2++){
+                if(text1.charAt(index1 - 1) == text2.charAt(index2 - 1))
+                    dp[index1][index2] = 1+ dp[index1 - 1][index2 - 1];
+                else {
+                    int first = dp[index1 - 1][index2];
+                    int second = dp[index1][index2 - 1];
+                    dp[index1][index2] = Math.max(first, second);
+                }
+                
+            }
+        }
+
+        // return dp[n1][n2];
+
+        int i = n1, j = n2;
+
+        String ans = "";
+
+        while(i > 0 && j > 0){
+            if(text1.charAt(i-1) == text2.charAt(j-1)){
+                // add common character only one time
+                ans += text1.charAt(i-1); i--; j--;
+            }else if(dp[i - 1][j] > dp[i][j - 1]){
+                // which is greater move to that side and add the current char of it
+                ans += text1.charAt(i-1);
+                i--;
+            }else{
+                ans += text2.charAt(j-1);
+                j--;
+            }
+        }
+
+        // add the string until it reached > 0
+        while(i > 0) {
+            ans += text1.charAt(i-1);
+            i--;
+        }
+
+        while(j > 0) {
+            ans += text2.charAt(j-1);
+            j--;
+        }
+
+        return new StringBuilder(ans).reverse().toString();
+    }
+
+    public String shortestCommonSupersequence(String text1, String text2) {
+
+        int n1 = text1.length();
+
+        int n2 = text2.length();
+
+        int[][] dp = new int[n1 + 1][n2 + 1];
+
+        for(int[] a: dp) Arrays.fill(a, -1);
+
+        return lcs(dp, n1, n2, text1, text2);
+        
+    }
+}
