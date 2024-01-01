@@ -1,0 +1,165 @@
+
+https://leetcode.com/problems/edit-distance/description/
+
+class Solution {
+
+    // For any string matching operations, we exactly do three things
+
+    /**
+    
+        1. insert
+        2. Delete
+        3. Replace
+
+    
+    
+     */
+
+     // T.C -> exponential, S.C -> o(n + m)
+    public int solve(int i, int j, String word1, String word2){
+
+        // Base case 
+
+        // if i < 0, whatever left from word2, we need to insert everything because word1 is empty
+        if(i < 0) return j + 1;
+
+
+        //if j < 0, if word2 is empty, we need to whatever left from the first string to match the word2
+
+        if(j<0) return i + 1;
+
+        // If characters are matching, just call the recursion for the rest string
+        if(word1.charAt(i) == word2.charAt(j)) return solve(i - 1, j - 1, word1, word2);
+
+        // Insert operation -> horse , ros -> we can add s to horse and it will become horses and s will match with s of ros, it will take one step, then call the recursion for rest 
+
+        // i will not change because we are inserting extra char at first string and it will match with current j
+        // we need to reduce j to match with current i
+
+        int insert = 1 + solve(i, j-1, word1, word2);
+
+        // we can delete the char of word1, i will reduce, j remains same because it has to still match the i, one step
+        int delete = 1 + solve(i - 1, j, word1, word2);
+        
+        // we can replace the char of i with the char of j, so it will get match, decrease the i and j for rest comparison
+
+        int replace = 1 + solve(i - 1, j - 1, word1, word2);
+
+        return Math.min(insert, Math.min(delete, replace));
+
+    }
+
+    // Over lapping sub problems -> Memoization O(N*M), O(N*M) + O(N+M)
+    public int solve(int i, int j, String word1, String word2, int[][] dp){
+        
+        if(i == 0) return j;
+
+        if(j==0) return i;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        if(word1.charAt(i-1) == word2.charAt(j-1)) return dp[i][j] = solve(i - 1, j - 1, word1, word2, dp);
+        
+        int insert = 1 + solve(i, j-1, word1, word2, dp);
+
+        int delete = 1 + solve(i - 1, j, word1, word2, dp);
+        
+        int replace = 1 + solve(i - 1, j - 1, word1, word2, dp);
+
+        return dp[i][j] = Math.min(insert, Math.min(delete, replace));
+
+    }
+
+    // Tabulation O(N*M), O(N*M)
+
+    public int solve(int l1, int l2, int[][] dp, String word1, String word2){
+
+        for(int j = 0; j<=l2; j++) dp[0][j] = j;
+         for(int i = 0; i<=l1; i++) dp[i][0] = i;
+
+         for(int i = 1; i<=l1; i++){
+             for(int j = 1; j<=l2; j++){
+                 if(word1.charAt(i-1) == word2.charAt(j-1)) dp[i][j] = dp[i - 1][j - 1];
+                 else{
+                    int insert = 1 + dp[i][j-1];
+
+                    int delete = 1 + dp[i-1][j];
+                    
+                    int replace = 1 + dp[i-1][j-1];
+
+                    dp[i][j] = Math.min(insert, Math.min(delete, replace));
+
+                 }
+             }
+         }
+
+         return dp[l1][l2];
+
+    }
+
+    // space optimization O(N*M), O(M)
+
+    public int solve(int l1, int l2, int[] dp, String word1, String word2){
+
+        for(int j = 0; j<=l2; j++) dp[j] = j;
+
+         for(int i = 1; i<=l1; i++){
+            int[] cur = new int[l2+1];
+            Arrays.fill(cur, 0);
+            cur[0] = i;
+            for(int j = 1; j<=l2; j++){
+                 if(word1.charAt(i-1) == word2.charAt(j-1)) cur[j] = dp[j - 1];
+                 else{
+                    int insert = 1 + cur[j-1];
+
+                    int delete = 1 + dp[j];
+                    
+                    int replace = 1 + dp[j-1];
+
+                    cur[j] = Math.min(insert, Math.min(delete, replace));
+
+                 }
+             }
+
+             dp = cur;
+         }
+
+         return dp[l2];
+
+    }
+	
+    
+    public int minDistance(String word1, String word2) {
+
+        int l1 = word1.length();
+        int l2 = word2.length();
+
+        // return solve(l1 - 1, l2 - 1, word1, word2);
+
+        // -------------
+
+        int dp[][] = new int[l1+1][l2+1];
+
+        // for(int [] a: dp) Arrays.fill(a, -1);
+
+        // return solve(l1, l2, word1, word2, dp);
+
+        //-----------
+
+        // for(int [] a: dp) Arrays.fill(a, 0);
+
+        // return solve(l1, l2, dp, word1, word2);
+
+        //----------------
+
+        int[] prev = new int[l2+1];
+
+        Arrays.fill(prev, 0);
+
+        return solve(l1, l2, prev, word1, word2);
+
+
+
+        
+    }
+}
