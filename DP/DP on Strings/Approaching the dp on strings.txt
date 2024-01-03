@@ -1,0 +1,4 @@
+1. Write the base condition
+2. Represent the problem in terms of index1, index2 like dp[index1][index2]
+3. Compare the strings based on the given criteria
+4. write tabulation, space optimization techniques to reduce the time complexity and space complexity.
