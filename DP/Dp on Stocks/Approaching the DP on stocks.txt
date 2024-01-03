@@ -1,0 +1,6 @@
+Approaching the DP on stocks,
+
+1. Divide the problem into index wise
+2. For each stock you have option to buy or sell it, keep the buy variable in function
+3. dp[index][buy]
+4. index == n return 0 // there is nothing returns from the stock
