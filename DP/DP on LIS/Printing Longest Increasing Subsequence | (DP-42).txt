@@ -1,0 +1,57 @@
+https://www.codingninjas.com/studio/problems/printing-longest-increasing-subsequence_8360670?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf
+
+// Tabulation approach -> Time complexity (o(n * n)), space complexity -> o(n)
+
+public int lengthOfLIS(int[] nums) {
+
+//------------------------------------------
+
+
+        //printint the LIS
+        
+        int n = nums.length;
+
+		int[] dp = new int[n];
+
+        int[] hash = new int[n];
+
+		Arrays.fill(dp, 1);
+
+        int maxi = 0;
+
+        int lastindex = 0;
+
+		for(int i = 0; i<n; i++){
+            hash[i] = i;
+			for(int prev = 0; prev < i; prev++){
+
+				if(nums[prev] < nums[i] && 1 + dp[prev] > dp[i]){
+					dp[i] = 1+dp[prev];
+                    hash[i] = prev;
+				}
+
+			}
+
+			if(dp[i] > maxi){
+                maxi = dp[i];
+                lastindex = i;
+            }
+
+		}
+
+		List<Integer> ans = new ArrayList<>();
+
+        ans.add(nums[lastindex]);
+        while(hash[lastindex] != lastindex){
+            lastindex = hash[lastindex];
+            ans.add(nums[lastindex]);
+        }
+
+        Collections.reverse(ans);
+
+        System.out.println(ans);
+
+        return maxi;
+
+
+    }
