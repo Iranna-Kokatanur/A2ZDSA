@@ -1,0 +1,79 @@
+https://www.codingninjas.com/studio/problems/longest-bitonic-sequence_1062688?utm_source=striver&utm_medium=website&utm_campaign=a_zcoursetuf&leftPanelTabValue=PROBLEM
+
+public class Solution {
+
+    /*Time Complexity: O(N*N)
+
+    Reason: There are two nested loops that are run twice.
+
+    Space Complexity: O(N)
+
+    Reason: We are only using two rows of size n.*/
+    public static int longestBitonicSequence(int[] arr, int n) {
+        
+        /**
+
+        A Bitonic Sequence is a sequence of numbers 
+        that is first strictly increasing and then strictly decreasing.
+
+
+        A strictly ascending order sequence is also considered bitonic, 
+        with the decreasing part as empty, and same for a strictly descending
+        order sequence.
+
+        */
+
+        // If you code LIS from the end to start of the array, it looks Longest
+
+        // decreasing subsequence from start of the array
+
+
+        // LIS from the start of the array
+
+        int[] dp = new int[n];
+
+        for(int i = 0; i<n; i++){
+            dp[i] = 1;
+
+            for(int prev = 0; prev <i; prev++){
+
+                if(arr[i] > arr[prev] && dp[i] < 1 + dp[prev]){
+                    dp[i] = 1 + dp[prev];
+                }
+            }
+        }
+
+        // LIS from the end of the array
+
+        int[] dp1  = new int[n];
+
+        for(int i = n - 1; i >= 0; i--){
+            dp1[i] = 1;
+
+            for(int prev = n - 1; prev > i; prev--){
+
+                if(arr[i] > arr[prev] && dp1[i] < 1 + dp1[prev]){
+                    dp1[i] = 1 + dp1[prev];
+                }
+            }
+        }
+
+        int maxi = 0;
+
+        // dp[i] + dp1[i] - 1 because we are taking the length of LIS and LDS and -1 
+
+        // because there will be one common element in LIS and LDS
+
+        // E.g : [1, 2, 3, 2, 0] -> LIS from start of the arr : [1, 2, 3]
+
+        // LIS from the end of the arr -> [0, 2, 3] -> 3 is common element here so,
+
+        // length = 3 + 3 - 1
+
+        for(int i = 0; i<n; i++){
+            maxi = Math.max(dp[i] + dp1[i] - 1, maxi);
+        }
+
+        return maxi;
+    }
+}
