@@ -1,0 +1,12 @@
+1. Initialize dp with 1 because each element is a subsequence of itself.
+
+prev -> 0 to < cur
+
+2. if arr[cur] > arr[prev] and subsequence length of cur < subsequence length of prev + 1, add dp[cur] = dp[prev] + 1
+
+3. take the max of dp, because it is containing the subsequence length
+
+4. If they asked subset means there is no ordering, so, first sort the arr and then do the procedure of LIS
+
+
+
