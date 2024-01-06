@@ -1,0 +1,42 @@
+https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/
+
+class Solution {
+
+    // Time complexity o(n*n), space -> o(n)
+    public int findNumberOfLIS(int[] nums) {
+
+        int n = nums.length;
+
+        int[] dp = new int[n];
+
+        int[] cnt = new int[n];
+
+        int maxi = 0;
+
+        for(int i = 0; i<n; i++){
+            cnt[i] = dp[i] = 1;
+            for(int prev = 0; prev < i; prev++){
+                // if it is dp[i] < dp[prev] + 1 means the number of subsequence that the prev has is same for i also
+                if(nums[i] > nums[prev] && dp[i] < dp[prev] + 1){
+                    dp[i] = dp[prev] + 1;
+                    cnt[i] = cnt[prev];
+                }else if(nums[i] > nums[prev] && dp[i] == dp[prev] + 1){
+                    // if dp[i] == dp[prev] + 1 means there are other subsequence of prev which are same length of dp[i]
+                    cnt[i] += cnt[prev];
+                }
+            }
+
+            maxi = Math.max(maxi, dp[i]);
+
+        }
+        
+        int ans = 0;
+
+        for(int i = 0; i<n; i++){
+            if(dp[i] == maxi) ans += cnt[i];
+        }
+        
+        return ans;
+
+    }
+}
