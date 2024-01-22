@@ -1,0 +1,112 @@
+https://leetcode.com/problems/palindrome-partitioning-ii/description/
+
+class Solution {
+
+    // Do partion on each index and check whether it is palindome or not, if it is then call the recursion
+
+    // for the rest half. At finally take the minimum of its results
+
+    
+
+    private boolean isPalindrome(int i, int j, String s){
+
+        while(i < j){
+            if(s.charAt(i) != s.charAt(j)) return false;
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+
+    //Recursion -> exponential
+    public int solve(int i, String s){
+        int n = s.length();
+
+        if(i == n) return 0;
+        
+        int ans = Integer.MAX_VALUE;
+
+        for(int j = i; j < n; j++){
+            
+            if(isPalindrome(i, j, s)){
+                int cut = 1 + solve(j + 1, s);
+                ans = Math.min(ans, cut);
+            }
+
+            
+        }
+
+        return ans;
+    }
+
+
+    // Memoization -> o(n), o(n) + o(n)
+    public int solve(int i, String s, int[] dp){
+
+        int n = s.length();
+
+        if(i == n)  return 0;
+
+        if(dp[i] != -1) return dp[i];
+        
+        int ans = Integer.MAX_VALUE;
+
+        for(int j = i; j < n; j++){
+            
+            if(isPalindrome(i, j, s)){
+                int cut = 1 + solve(j + 1, s, dp);
+                ans = Math.min(ans, cut);
+            }
+
+            
+        }
+
+        return dp[i] = ans;
+    }
+
+    //Tabulation o(n), o(n)
+    public int solve(String s){
+        
+        int n = s.length();
+
+        int[] dp = new int[n + 1];
+
+        Arrays.fill(dp, 0);
+
+        for(int i = n - 1; i>=0; i--){
+            int ans = Integer.MAX_VALUE;
+            for(int j = i; j < n; j++){
+                if(isPalindrome(i, j, s)){
+                    int cut = 1 + solve(j + 1, s, dp);
+                    ans = Math.min(ans, cut);
+                }
+            }
+            dp[i] = ans;
+        }
+
+        return dp[0] - 1;
+
+    }
+
+    public int minCut(String s) {
+        
+        // return solve(0, s) - 1;
+
+        //-------------------------------------------------
+
+        int n = s.length();
+
+        // int[] dp = new int[n];
+
+        // Arrays.fill(dp, -1);
+
+        // solve(0, s, dp);
+
+        // return dp[0] - 1;
+
+        //------------------------------------------------
+
+        return solve(s);
+    }
+}
