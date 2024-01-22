@@ -41,7 +41,7 @@ class Solution {
     }
 
 
-    // Memoization -> o(n), o(n) + o(n)
+    // Memoization -> o(n) * o(n), o(n) + o(n)
     public int solve(int i, String s, int[] dp){
 
         int n = s.length();
@@ -65,7 +65,7 @@ class Solution {
         return dp[i] = ans;
     }
 
-    //Tabulation o(n), o(n)
+    //Tabulation o(n)*o(n), o(n)
     public int solve(String s){
         
         int n = s.length();
