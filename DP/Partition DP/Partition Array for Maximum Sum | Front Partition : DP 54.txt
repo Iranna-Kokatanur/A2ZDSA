@@ -1,0 +1,90 @@
+https://leetcode.com/problems/partition-array-for-maximum-sum/description/
+
+class Solution {
+
+    // It is the same like palindrome partitioning, but here we are not going till the length of the array
+    // we are just making the partition till k
+
+    // Recursion - Exponential
+    public int solve(int[] arr, int k, int i){
+        int n = arr.length;
+
+        if(i == n) return 0;
+
+        int maxi = Integer.MIN_VALUE;
+        int length = 0;
+        int ans = Integer.MIN_VALUE;
+        for(int j = i; j < Math.min(i + k, n); j++){
+            length++;
+            maxi = Math.max(arr[j], maxi);
+            ans = Math.max(length * maxi + solve(arr, k, j+1), ans);
+        }
+
+        return ans;
+    }
+
+    // Memoization -> o(n) * o(k), o(n) + o(n)
+    public int solve(int[] arr, int k, int i, int[] dp){
+        int n = arr.length;
+
+        if(i == n) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+        int maxi = Integer.MIN_VALUE;
+        int length = 0;
+        int ans = Integer.MIN_VALUE;
+        for(int j = i; j < Math.min(i + k, n); j++){
+            length++;
+            maxi = Math.max(arr[j], maxi);
+            ans = Math.max(length * maxi + solve(arr, k, j+1, dp), ans);
+        }
+
+        return dp[i] = ans;
+    }
+
+    // Tabulation -> o(n) * o(k), o(n)
+    public int solve(int[] arr, int k){
+
+        int n = arr.length;
+
+        int[] dp = new int[n+1];
+
+        Arrays.fill(dp, 0);
+
+        for(int i = n - 1; i>=0; i--){
+            int maxi = Integer.MIN_VALUE;
+            int length = 0;
+            int ans = Integer.MIN_VALUE;
+            for(int j = i; j < Math.min(i + k, n); j++){
+                length++;
+                maxi = Math.max(arr[j], maxi);
+                ans = Math.max(length * maxi + solve(arr, k, j+1, dp), ans);
+            }
+            dp[i] = ans;
+        }
+
+        return dp[0];
+    }
+
+
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        
+        // return solve(arr, k, 0);
+
+        //-------------------------------
+        
+        // int n = arr.length;
+
+        // int[] dp = new int[n];
+
+        // Arrays.fill(dp, -1);
+
+        // return solve(arr, k, 0, dp);
+
+        //-------------------------------------
+
+        return solve(arr, k);
+
+    }
+}
