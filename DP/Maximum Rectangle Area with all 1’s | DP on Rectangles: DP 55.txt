@@ -1,0 +1,63 @@
+https://leetcode.com/problems/maximal-rectangle/description/
+
+class Solution {
+   // Time Complexity: O(N * (M+M)),
+
+  // Space Complexity: O(M)
+    // Area of Histogram -> remembering the past so kept this under DP
+
+    private int hist(ArrayList<Integer> heights){
+            int width = 0;
+
+            int ans = 0;
+
+            int n = heights.size();
+
+            Stack<Integer> st = new Stack<>();
+
+            for(int i = 0; i<=n; i++){
+            
+                    while(!st.isEmpty() && (i == n || heights.get(st.peek()) >= heights.get(i))){
+                        int height = heights.get(st.peek());
+                        st.pop();
+
+                        if(st.isEmpty()) width = i;
+                        else width = i - st.peek() - 1;
+
+                        ans = Math.max(ans, width * height);
+
+                    }
+
+            st.push(i);
+
+            }
+
+            return ans;
+
+    }
+    public int maximalRectangle(char[][] matrix) {
+        
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        ArrayList<Integer> heights = new ArrayList<>();
+
+        for(int i = 0; i<m; i++) heights.add(0);
+
+        int maxAns = Integer.MIN_VALUE;
+
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<m; j++){
+                if(matrix[i][j] == '1') {
+                    int num = heights.get(j);
+                    heights.set(j, ++num);
+                }
+                else heights.set(j, 0);
+            }
+            int ans = hist(heights);
+            maxAns = Math.max(maxAns, ans);
+        }
+
+        return maxAns;
+    }
+}
